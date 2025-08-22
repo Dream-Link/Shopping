@@ -1582,20 +1582,29 @@
                 return;
             }
 
-            // Create HTML content for PDF
+            // Create HTML content for PDF with improved layout
             const printContent = `
+                <!DOCTYPE html>
                 <html>
                 <head>
                     <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>${storeName} - सभी प्रोडक्ट्स</title>
                     <style>
-                        @page { margin: 20mm; }
+                        @page { 
+                            margin: 15mm; 
+                            size: A4;
+                        }
+                        * {
+                            box-sizing: border-box;
+                        }
                         body { 
-                            font-family: Arial, sans-serif; 
+                            font-family: 'Arial', 'Noto Sans Devanagari', sans-serif; 
                             line-height: 1.4; 
                             color: #333;
                             margin: 0;
                             padding: 0;
+                            background: white;
                         }
                         .header { 
                             text-align: center; 
@@ -1621,53 +1630,75 @@
                         .product { 
                             border: 2px solid #e5e7eb; 
                             border-radius: 12px; 
-                            padding: 20px; 
-                            margin-bottom: 20px;
-                            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-                            break-inside: avoid;
-                        }
-                        .product-header { 
-                            display: flex; 
-                            justify-content: space-between; 
-                            align-items: flex-start;
+                            padding: 15px; 
                             margin-bottom: 15px;
+                            background: #f8fafc;
+                            break-inside: avoid;
+                            page-break-inside: avoid;
+                        }
+                        .product-main {
+                            display: flex;
+                            align-items: flex-start;
+                            gap: 15px;
+                        }
+                        .product-left {
+                            flex: 1;
+                            min-width: 0;
+                        }
+                        .product-right {
+                            flex: 1;
+                            text-align: right;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-end;
                         }
                         .product-name { 
                             font-size: 18px; 
                             font-weight: bold; 
                             color: #1f2937;
-                            flex: 1;
-                            text-align: left;
+                            margin-bottom: 8px;
+                            word-wrap: break-word;
                         }
                         .product-price { 
                             font-size: 20px; 
                             font-weight: bold; 
                             color: #059669;
-                            margin-left: 20px;
-                            text-align: right;
+                            margin-bottom: 10px;
+                        }
+                        .product-details { 
+                            color: #4b5563; 
+                            font-size: 14px;
+                            margin-bottom: 8px;
+                            word-wrap: break-word;
+                        }
+                        .product-meta { 
+                            color: #9ca3af; 
+                            font-size: 12px; 
+                            font-style: italic;
                         }
                         .barcode-box {
                             background: white;
                             border: 2px solid #374151;
                             border-radius: 8px;
-                            padding: 10px 15px;
+                            padding: 12px 15px;
                             font-family: 'Courier New', monospace;
-                            font-size: 16px;
-                            font-weight: bold;
-                            text-align: right;
-                            margin: 10px 0;
-                            letter-spacing: 1px;
-                        }
-                        .product-details { 
-                            color: #4b5563; 
-                            margin-top: 10px;
                             font-size: 14px;
+                            font-weight: bold;
+                            letter-spacing: 1px;
+                            min-width: 180px;
+                            text-align: center;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                         }
-                        .product-meta { 
-                            color: #9ca3af; 
-                            font-size: 12px; 
-                            margin-top: 10px;
-                            font-style: italic;
+                        .barcode-label {
+                            font-size: 10px;
+                            color: #666;
+                            margin-bottom: 4px;
+                            font-family: Arial, sans-serif;
+                        }
+                        .barcode-number {
+                            font-size: 16px;
+                            color: #000;
+                            font-weight: bold;
                         }
                         .footer { 
                             text-align: center; 
@@ -1675,12 +1706,31 @@
                             padding-top: 20px; 
                             border-top: 2px solid #e5e7eb;
                             color: #6b7280;
+                            page-break-inside: avoid;
                         }
                         .total-count {
                             font-size: 16px;
                             font-weight: bold;
                             color: #2563eb;
                             margin-bottom: 10px;
+                        }
+                        .serial-number {
+                            background: #2563eb;
+                            color: white;
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 12px;
+                            font-weight: bold;
+                            margin-right: 8px;
+                            flex-shrink: 0;
+                        }
+                        @media print {
+                            body { -webkit-print-color-adjust: exact; }
+                            .product { page-break-inside: avoid; }
                         }
                     </style>
                 </head>
@@ -1693,18 +1743,23 @@
                     
                     ${Object.values(products).map((product, index) => `
                         <div class="product">
-                            <div class="product-header">
-                                <div class="product-name">${index + 1}. ${product.name}</div>
-                                <div class="product-price">₹${product.price}</div>
+                            <div class="product-main">
+                                <div class="product-left">
+                                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                        <span class="serial-number">${index + 1}</span>
+                                        <span class="product-name">${product.name}</span>
+                                    </div>
+                                    <div class="product-price">💰 ₹${product.price}</div>
+                                    ${product.details ? `<div class="product-details">📝 ${product.details}</div>` : ''}
+                                    ${product.dateAdded ? `<div class="product-meta">📅 ${product.dateAdded}</div>` : ''}
+                                </div>
+                                <div class="product-right">
+                                    <div class="barcode-box">
+                                        <div class="barcode-label">BARCODE</div>
+                                        <div class="barcode-number">${product.barcode || product.id}</div>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="barcode-box">
-                                🔢 ${product.barcode || product.id}
-                            </div>
-                            
-                            ${product.details ? `<div class="product-details">📝 विवरण: ${product.details}</div>` : ''}
-                            
-                            ${product.dateAdded ? `<div class="product-meta">📅 जोड़ा गया: ${product.dateAdded}</div>` : ''}
                         </div>
                     `).join('')}
                     
@@ -1716,20 +1771,55 @@
                 </html>
             `;
 
-            // Create a new window for printing
-            const printWindow = window.open('', '_blank');
+            // Create a new window for printing with better handling
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            
+            if (!printWindow) {
+                showToast('❌ पॉप-अप ब्लॉक हो गया! कृपया पॉप-अप allow करें', 'error');
+                return;
+            }
+
+            printWindow.document.open();
             printWindow.document.write(printContent);
             printWindow.document.close();
             
-            // Wait for content to load then print
-            printWindow.onload = function() {
-                setTimeout(() => {
+            // Better print handling with multiple fallbacks
+            const handlePrint = () => {
+                try {
+                    printWindow.focus();
                     printWindow.print();
-                    printWindow.close();
-                }, 500);
+                    
+                    // Close window after print dialog
+                    setTimeout(() => {
+                        try {
+                            printWindow.close();
+                        } catch(e) {
+                            console.log('Window already closed');
+                        }
+                    }, 1000);
+                    
+                    showToast('🖨️ प्रिंट डायलॉग खुल गया!', 'success');
+                } catch (error) {
+                    console.error('Print error:', error);
+                    showToast('❌ प्रिंट में समस्या! कृपया फिर से कोशिश करें', 'error');
+                }
             };
-            
-            showToast('🖨️ PDF प्रिंट के लिए तैयार!', 'success');
+
+            // Wait for content to fully load
+            if (printWindow.document.readyState === 'complete') {
+                setTimeout(handlePrint, 500);
+            } else {
+                printWindow.addEventListener('load', () => {
+                    setTimeout(handlePrint, 500);
+                });
+                
+                // Fallback if load event doesn't fire
+                setTimeout(() => {
+                    if (printWindow.document.readyState !== 'complete') {
+                        handlePrint();
+                    }
+                }, 2000);
+            }
         }
 
         // Clear history function
@@ -1816,5 +1906,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97300c6727de4055',t:'MTc1NTg0MTM2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97300fc5c16e2e59',t:'MTc1NTg0MTUwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
