@@ -39,6 +39,34 @@
         .theme-cyan { --primary: #06B6D4; --secondary: #0891B2; --accent: #67E8F9; --bg-start: #ECFEFF; --bg-end: #CFFAFE; }
         .theme-dark { --primary: #374151; --secondary: #1F2937; --accent: #6B7280; --bg-start: #111827; --bg-end: #1F2937; --card: #374151; --text: #F9FAFB; --text-light: #D1D5DB; }
         
+        /* Gradient Themes */
+        .theme-sunset { --primary: #F97316; --secondary: #EF4444; --accent: #EC4899; --bg-start: #FFF7ED; --bg-end: #FEF2F2; }
+        .theme-ocean { --primary: #3B82F6; --secondary: #06B6D4; --accent: #14B8A6; --bg-start: #EFF6FF; --bg-end: #F0FDFA; }
+        .theme-forest { --primary: #10B981; --secondary: #059669; --accent: #0D9488; --bg-start: #ECFDF5; --bg-end: #F0FDFA; }
+        .theme-lavender { --primary: #8B5CF6; --secondary: #A855F7; --accent: #EC4899; --bg-start: #F5F3FF; --bg-end: #FDF2F8; }
+        
+        /* Neon Themes */
+        .theme-neon-blue { --primary: #2563EB; --secondary: #06B6D4; --accent: #3B82F6; --bg-start: #DBEAFE; --bg-end: #CFFAFE; }
+        .theme-neon-green { --primary: #16A34A; --secondary: #84CC16; --accent: #10B981; --bg-start: #DCFCE7; --bg-end: #ECFCCB; }
+        .theme-neon-pink { --primary: #EC4899; --secondary: #F43F5E; --accent: #C026D3; --bg-start: #FDF2F8; --bg-end: #FDF4FF; }
+        .theme-neon-purple { --primary: #8B5CF6; --secondary: #A855F7; --accent: #6366F1; --bg-start: #F3E8FF; --bg-end: #EEF2FF; }
+        
+        /* Pastel Themes */
+        .theme-pastel-mint { --primary: #10B981; --secondary: #34D399; --accent: #6EE7B7; --bg-start: #F0FDF4; --bg-end: #ECFDF5; }
+        .theme-pastel-peach { --primary: #F97316; --secondary: #FB923C; --accent: #FBBF24; --bg-start: #FFFBEB; --bg-end: #FEF3C7; }
+        .theme-pastel-sky { --primary: #0EA5E9; --secondary: #38BDF8; --accent: #7DD3FC; --bg-start: #F0F9FF; --bg-end: #E0F2FE; }
+        .theme-pastel-rose { --primary: #F43F5E; --secondary: #FB7185; --accent: #FDA4AF; --bg-start: #FFF1F2; --bg-end: #FFE4E6; }
+        
+        /* Monochrome Themes */
+        .theme-mono-black { --primary: #374151; --secondary: #4B5563; --accent: #6B7280; --bg-start: #F9FAFB; --bg-end: #F3F4F6; --card: #FFFFFF; --text: #111827; --text-light: #6B7280; }
+        .theme-mono-white { --primary: #9CA3AF; --secondary: #6B7280; --accent: #4B5563; --bg-start: #FFFFFF; --bg-end: #F9FAFB; --card: #F9FAFB; --text: #111827; --text-light: #6B7280; }
+        
+        /* Special Themes */
+        .theme-royal { --primary: #7C3AED; --secondary: #6366F1; --accent: #3B82F6; --bg-start: #F5F3FF; --bg-end: #EEF2FF; }
+        .theme-earth { --primary: #D97706; --secondary: #F59E0B; --accent: #EF4444; --bg-start: #FFFBEB; --bg-end: #FEF2F2; }
+        .theme-cosmic { --primary: #4C1D95; --secondary: #7C2D12; --accent: #BE185D; --bg-start: #FAF5FF; --bg-end: #FDF2F8; }
+        .theme-vintage { --primary: #CA8A04; --secondary: #D97706; --accent: #DC2626; --bg-start: #FEFCE8; --bg-end: #FEF2F2; }
+        
         /* Apply theme colors */
         body {
             background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
@@ -116,25 +144,31 @@
             top: 10px;
             right: 10px;
             z-index: 20;
-            width: 32px;
-            height: 32px;
-            background: rgba(0, 0, 0, 0.7);
-            border: none;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.2);
             border-radius: 50%;
-            color: white;
-            font-size: 14px;
+            color: #333;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
         
         .flashlight-btn:hover {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
         
         .flashlight-btn.active {
             background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
         }
         
         .modern-card {
@@ -359,14 +393,14 @@
     <div id="shoppingSection" class="p-3 pb-20 hidden">
         <!-- Top Action Buttons -->
         <div class="grid grid-cols-3 gap-2 mb-3">
-            <button onclick="saveBill()" class="secondary-bg text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
-                💾 सेव
+            <button onclick="clearBill()" class="bg-red-500 text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
+                🗑️ क्लियर
             </button>
             <button onclick="printBill()" class="primary-bg text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
                 🖨️ प्रिंट
             </button>
-            <button onclick="clearBill()" class="bg-red-500 text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
-                🗑️ क्लियर
+            <button onclick="saveBill()" class="secondary-bg text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
+                💾 सेव
             </button>
         </div>
 
@@ -374,9 +408,8 @@
         <div class="modern-card p-4 mb-3">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-lg font-bold text-main">🛍️ बिल</h3>
+                <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम" class="p-2 modern-input text-sm w-40">
             </div>
-            
-            <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम (वैकल्पिक)" class="w-full p-3 modern-input mb-3 text-sm">
             
             <!-- Single line for search and scan -->
             <div class="flex gap-2 mb-3">
@@ -452,54 +485,137 @@
     <div id="themeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
         <div class="modern-card p-4 w-full max-w-lg slide-up">
             <h3 class="text-lg font-bold mb-3 text-main">🎨 थीम चुनें</h3>
-            <div class="grid grid-cols-3 gap-2 mb-4">
-                <button onclick="changeTheme('blue')" class="p-3 rounded-lg border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:border-blue-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-blue-500 to-indigo-500 rounded mb-1"></div>
+            <div class="grid grid-cols-4 gap-2 mb-4 max-h-80 overflow-y-auto">
+                <!-- Basic Colors -->
+                <button onclick="changeTheme('blue')" class="p-2 rounded-lg border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:border-blue-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-blue-500 to-indigo-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">नीला</span>
                 </button>
-                <button onclick="changeTheme('green')" class="p-3 rounded-lg border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:border-green-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded mb-1"></div>
+                <button onclick="changeTheme('green')" class="p-2 rounded-lg border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:border-green-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">हरा</span>
                 </button>
-                <button onclick="changeTheme('purple')" class="p-3 rounded-lg border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 hover:border-purple-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-purple-500 to-violet-500 rounded mb-1"></div>
+                <button onclick="changeTheme('purple')" class="p-2 rounded-lg border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 hover:border-purple-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-purple-500 to-violet-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">बैंगनी</span>
                 </button>
-                <button onclick="changeTheme('pink')" class="p-3 rounded-lg border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-pink-100 hover:border-pink-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-pink-500 to-rose-500 rounded mb-1"></div>
+                <button onclick="changeTheme('pink')" class="p-2 rounded-lg border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-pink-100 hover:border-pink-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-pink-500 to-rose-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">गुलाबी</span>
                 </button>
-                <button onclick="changeTheme('orange')" class="p-3 rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:border-orange-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded mb-1"></div>
+                <button onclick="changeTheme('orange')" class="p-2 rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:border-orange-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-orange-500 to-amber-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">नारंगी</span>
                 </button>
-                <button onclick="changeTheme('red')" class="p-3 rounded-lg border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:border-red-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-red-500 to-pink-500 rounded mb-1"></div>
+                <button onclick="changeTheme('red')" class="p-2 rounded-lg border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:border-red-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-red-500 to-pink-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">लाल</span>
                 </button>
-                <button onclick="changeTheme('indigo')" class="p-3 rounded-lg border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:border-indigo-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-indigo-500 to-blue-500 rounded mb-1"></div>
+                <button onclick="changeTheme('indigo')" class="p-2 rounded-lg border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:border-indigo-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-indigo-500 to-blue-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">इंडिगो</span>
                 </button>
-                <button onclick="changeTheme('teal')" class="p-3 rounded-lg border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100 hover:border-teal-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded mb-1"></div>
+                <button onclick="changeTheme('teal')" class="p-2 rounded-lg border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100 hover:border-teal-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-teal-500 to-cyan-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">टील</span>
                 </button>
-                <button onclick="changeTheme('yellow')" class="p-3 rounded-lg border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-yellow-100 hover:border-yellow-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-yellow-500 to-orange-500 rounded mb-1"></div>
+                <button onclick="changeTheme('yellow')" class="p-2 rounded-lg border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-yellow-100 hover:border-yellow-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-yellow-500 to-orange-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">पीला</span>
                 </button>
-                <button onclick="changeTheme('gray')" class="p-3 rounded-lg border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:border-gray-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-gray-500 to-slate-500 rounded mb-1"></div>
+                <button onclick="changeTheme('gray')" class="p-2 rounded-lg border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:border-gray-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-gray-500 to-slate-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">स्लेट</span>
                 </button>
-                <button onclick="changeTheme('cyan')" class="p-3 rounded-lg border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 hover:border-cyan-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-cyan-500 to-blue-500 rounded mb-1"></div>
+                <button onclick="changeTheme('cyan')" class="p-2 rounded-lg border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 hover:border-cyan-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded mb-1"></div>
                     <span class="text-xs font-medium">सियान</span>
                 </button>
-                <button onclick="changeTheme('dark')" class="p-3 rounded-lg border-2 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-400 transition-all">
-                    <div class="w-full h-6 bg-gradient-to-r from-gray-700 to-gray-900 rounded mb-1"></div>
+                <button onclick="changeTheme('dark')" class="p-2 rounded-lg border-2 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-gray-700 to-gray-900 rounded mb-1"></div>
                     <span class="text-xs font-medium text-white">डार्क</span>
+                </button>
+                
+                <!-- Gradient Themes -->
+                <button onclick="changeTheme('sunset')" class="p-2 rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-red-100 hover:border-orange-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">सनसेट</span>
+                </button>
+                <button onclick="changeTheme('ocean')" class="p-2 rounded-lg border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-100 hover:border-blue-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-blue-400 via-cyan-500 to-teal-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">समुद्र</span>
+                </button>
+                <button onclick="changeTheme('forest')" class="p-2 rounded-lg border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 hover:border-green-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600 rounded mb-1"></div>
+                    <span class="text-xs font-medium">जंगल</span>
+                </button>
+                <button onclick="changeTheme('lavender')" class="p-2 rounded-lg border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-100 hover:border-purple-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-purple-400 via-violet-500 to-pink-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">लैवेंडर</span>
+                </button>
+                
+                <!-- Neon Themes -->
+                <button onclick="changeTheme('neon-blue')" class="p-2 rounded-lg border-2 border-blue-300 bg-gradient-to-br from-blue-100 to-cyan-100 hover:border-blue-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 rounded mb-1"></div>
+                    <span class="text-xs font-medium">नीयन नीला</span>
+                </button>
+                <button onclick="changeTheme('neon-green')" class="p-2 rounded-lg border-2 border-green-300 bg-gradient-to-br from-green-100 to-lime-100 hover:border-green-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-green-500 via-lime-400 to-emerald-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">नीयन हरा</span>
+                </button>
+                <button onclick="changeTheme('neon-pink')" class="p-2 rounded-lg border-2 border-pink-300 bg-gradient-to-br from-pink-100 to-rose-100 hover:border-pink-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-pink-500 via-rose-400 to-fuchsia-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">नीयन गुलाबी</span>
+                </button>
+                <button onclick="changeTheme('neon-purple')" class="p-2 rounded-lg border-2 border-purple-300 bg-gradient-to-br from-purple-100 to-violet-100 hover:border-purple-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-purple-500 via-violet-400 to-indigo-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">नीयन बैंगनी</span>
+                </button>
+                
+                <!-- Pastel Themes -->
+                <button onclick="changeTheme('pastel-mint')" class="p-2 rounded-lg border-2 border-green-200 bg-gradient-to-br from-green-50 to-mint-50 hover:border-green-300 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-green-300 via-emerald-200 to-teal-300 rounded mb-1"></div>
+                    <span class="text-xs font-medium">पेस्टल मिंट</span>
+                </button>
+                <button onclick="changeTheme('pastel-peach')" class="p-2 rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-peach-50 hover:border-orange-300 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-orange-300 via-amber-200 to-yellow-300 rounded mb-1"></div>
+                    <span class="text-xs font-medium">पेस्टल पीच</span>
+                </button>
+                <button onclick="changeTheme('pastel-sky')" class="p-2 rounded-lg border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-sky-50 hover:border-blue-300 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-blue-300 via-sky-200 to-cyan-300 rounded mb-1"></div>
+                    <span class="text-xs font-medium">पेस्टल आसमानी</span>
+                </button>
+                <button onclick="changeTheme('pastel-rose')" class="p-2 rounded-lg border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-rose-50 hover:border-pink-300 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-pink-300 via-rose-200 to-red-300 rounded mb-1"></div>
+                    <span class="text-xs font-medium">पेस्टल गुलाब</span>
+                </button>
+                
+                <!-- Monochrome Themes -->
+                <button onclick="changeTheme('mono-black')" class="p-2 rounded-lg border-2 border-gray-400 bg-gradient-to-br from-gray-200 to-gray-300 hover:border-gray-600 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-gray-800 via-gray-600 to-gray-900 rounded mb-1"></div>
+                    <span class="text-xs font-medium">मोनो काला</span>
+                </button>
+                <button onclick="changeTheme('mono-white')" class="p-2 rounded-lg border-2 border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100 hover:border-gray-400 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 rounded mb-1"></div>
+                    <span class="text-xs font-medium">मोनो सफेद</span>
+                </button>
+                
+                <!-- Special Themes -->
+                <button onclick="changeTheme('royal')" class="p-2 rounded-lg border-2 border-purple-300 bg-gradient-to-br from-purple-100 to-indigo-100 hover:border-purple-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-700 rounded mb-1"></div>
+                    <span class="text-xs font-medium">रॉयल</span>
+                </button>
+                <button onclick="changeTheme('earth')" class="p-2 rounded-lg border-2 border-amber-300 bg-gradient-to-br from-amber-100 to-orange-100 hover:border-amber-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-amber-600 via-orange-600 to-red-700 rounded mb-1"></div>
+                    <span class="text-xs font-medium">धरती</span>
+                </button>
+                <button onclick="changeTheme('cosmic')" class="p-2 rounded-lg border-2 border-indigo-300 bg-gradient-to-br from-indigo-100 to-purple-100 hover:border-indigo-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-indigo-800 via-purple-700 to-pink-600 rounded mb-1"></div>
+                    <span class="text-xs font-medium">कॉस्मिक</span>
+                </button>
+                <button onclick="changeTheme('vintage')" class="p-2 rounded-lg border-2 border-yellow-300 bg-gradient-to-br from-yellow-100 to-amber-100 hover:border-yellow-500 transition-all">
+                    <div class="w-full h-4 bg-gradient-to-r from-yellow-600 via-amber-600 to-orange-700 rounded mb-1"></div>
+                    <span class="text-xs font-medium">विंटेज</span>
                 </button>
             </div>
             <button onclick="closeThemeModal()" class="w-full bg-gray-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
@@ -725,8 +841,18 @@
             const icons = { store: '🏪', shopping: '🛒', history: '📋' };
             const labels = { store: 'स्टोर', shopping: 'शॉपिंग', history: 'हिस्ट्री' };
             
-            activeTab.className = 'flex-1 py-3 px-3 text-center font-semibold primary-text border-b-2 primary-bg text-white';
+            activeTab.className = 'flex-1 py-3 px-3 text-center font-semibold border-b-2 primary-bg text-white';
             activeTab.innerHTML = `${icons[section]} ${labels[section]}`;
+            
+            // Update other tabs to ensure text is visible
+            const allTabs = ['store', 'shopping', 'history'];
+            allTabs.forEach(tab => {
+                if (tab !== section) {
+                    const tabElement = document.getElementById(tab + 'Tab');
+                    tabElement.className = 'flex-1 py-3 px-3 text-center font-semibold text-gray-700 hover:bg-gray-50';
+                    tabElement.innerHTML = `${icons[tab]} ${labels[tab]}`;
+                }
+            });
         }
 
         // Store name editing
@@ -755,15 +881,20 @@
             
             html5QrCode = new Html5Qrcode(section + 'Reader');
             
-            // Simplified and faster camera initialization
+            // Optimized camera initialization for faster startup
             const config = {
-                fps: 15,
+                fps: 20,
                 qrbox: { width: 160, height: 160 },
                 aspectRatio: 1.0,
-                disableFlip: false
+                disableFlip: true,
+                videoConstraints: {
+                    facingMode: "environment",
+                    width: { ideal: 640 },
+                    height: { ideal: 480 }
+                }
             };
             
-            // Try environment camera first (faster than enumerating all devices)
+            // Direct environment camera access for faster loading
             html5QrCode.start(
                 { facingMode: "environment" },
                 config,
@@ -908,7 +1039,7 @@
                             ${product.details ? `<p class="text-sm text-gray-600 mt-2 text-left">${product.details}</p>` : ''}
                         </div>
                         <div class="text-right">
-                            <div class="font-mono text-lg font-bold text-gray-800 bg-white px-3 py-2 rounded-lg border-2 border-gray-300">
+                            <div class="font-mono text-xs font-bold text-gray-800 bg-white px-2 py-1 rounded-lg border-2 border-gray-300">
                                 ${product.barcode || product.id}
                             </div>
                         </div>
@@ -1259,19 +1390,16 @@
             }
 
             historyDiv.innerHTML = billHistory.map(bill => `
-                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200 cursor-pointer hover:shadow-md transition-all" onclick="toggleBillDetails(${bill.id})">
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-xl border border-purple-200 cursor-pointer hover:shadow-md transition-all" onclick="toggleBillDetails(${bill.id})">
                     <div class="flex justify-between items-center">
                         <div class="flex-1">
-                            ${bill.customerName ? `<h4 class="font-bold text-gray-800 text-lg">${bill.customerName}</h4>` : `<h4 class="font-bold text-gray-800 text-lg">बिल #${bill.id}</h4>`}
-                            <p class="text-sm text-gray-600">📅 ${bill.date}</p>
+                            ${bill.customerName ? `<h4 class="font-semibold text-gray-800 text-sm">${bill.customerName}</h4>` : `<h4 class="font-semibold text-gray-800 text-sm">बिल #${bill.id}</h4>`}
+                            <p class="text-xs text-gray-600">📅 ${bill.date}</p>
                         </div>
                         <div class="text-right flex items-center space-x-2">
                             <div>
-                                <p class="font-bold text-green-600 text-xl">₹${bill.total.toFixed(2)}</p>
+                                <p class="font-bold text-green-600 text-sm">₹${bill.total.toFixed(2)}</p>
                             </div>
-                            <button onclick="event.stopPropagation(); printOldBill(${bill.id})" class="text-blue-500 hover:text-blue-700 text-xl">
-                                📥
-                            </button>
                         </div>
                     </div>
                     <div id="billDetails_${bill.id}" class="hidden mt-3 pt-3 border-t border-purple-200">
@@ -1286,6 +1414,11 @@
                             <div class="border-t pt-2 mt-2 flex justify-between font-bold text-green-600">
                                 <span>कुल राशि:</span>
                                 <span>₹${bill.total.toFixed(2)}</span>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <button onclick="event.stopPropagation(); printOldBill(${bill.id})" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                    📥 डाउनलोड करें
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1626,5 +1759,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972fac8077034bfb',t:'MTc1NTgzNzQzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972fed2ee6c7ff75',t:'MTc1NTg0MDA4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
