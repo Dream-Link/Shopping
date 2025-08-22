@@ -15,12 +15,22 @@
         
         .scanner-container {
             width: 100%;
-            max-width: 300px;
+            max-width: 350px;
             margin: 0 auto;
+            border: 2px solid #3B82F6;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
         }
         
-        #reader {
+        #reader, #storeReader, #shoppingReader {
             width: 100% !important;
+            border-radius: 8px;
+        }
+        
+        #reader video, #storeReader video, #shoppingReader video {
+            border-radius: 8px !important;
+            object-fit: cover !important;
         }
         
         .fade-in {
@@ -287,12 +297,38 @@
             
             Html5Qrcode.getCameras().then(devices => {
                 if (devices && devices.length) {
-                    const cameraId = devices[0].id;
+                    // Try to find back camera first
+                    let cameraId = devices[0].id;
+                    
+                    // Look for back camera (environment facing)
+                    const backCamera = devices.find(device => 
+                        device.label.toLowerCase().includes('back') || 
+                        device.label.toLowerCase().includes('rear') ||
+                        device.label.toLowerCase().includes('environment')
+                    );
+                    
+                    if (backCamera) {
+                        cameraId = backCamera.id;
+                    } else if (devices.length > 1) {
+                        // If multiple cameras, usually the second one is back camera
+                        cameraId = devices[devices.length - 1].id;
+                    }
+                    
                     html5QrCode.start(
                         cameraId,
                         {
                             fps: 10,
-                            qrbox: { width: 250, height: 250 }
+                            qrbox: { width: 280, height: 280 },
+                            aspectRatio: 1.0,
+                            disableFlip: false,
+                            videoConstraints: {
+                                facingMode: "environment", // This forces back camera
+                                focusMode: "continuous",
+                                advanced: [
+                                    { focusMode: "continuous" },
+                                    { focusDistance: { min: 0.1, max: 10 } }
+                                ]
+                            }
                         },
                         (decodedText, decodedResult) => {
                             if (section === 'store') {
@@ -303,11 +339,33 @@
                             stopScanning(section);
                         },
                         (errorMessage) => {
-                            // Handle scan error
+                            // Handle scan error silently
                         }
                     ).catch(err => {
                         console.log('Error starting scanner:', err);
-                        stopScanning(section);
+                        // Try with basic constraints if advanced fails
+                        html5QrCode.start(
+                            { facingMode: "environment" },
+                            {
+                                fps: 10,
+                                qrbox: { width: 280, height: 280 }
+                            },
+                            (decodedText, decodedResult) => {
+                                if (section === 'store') {
+                                    document.getElementById('productBarcode').value = decodedText;
+                                } else if (section === 'shopping') {
+                                    addToBill(decodedText);
+                                }
+                                stopScanning(section);
+                            },
+                            (errorMessage) => {
+                                // Handle scan error silently
+                            }
+                        ).catch(err2 => {
+                            console.log('Fallback scanner also failed:', err2);
+                            stopScanning(section);
+                            alert('कैमरा एक्सेस नहीं मिल सका। कृपया मैन्युअल बारकोड डालें।');
+                        });
                     });
                 }
             }).catch(err => {
@@ -750,5 +808,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f1e31a00484bf',t:'MTc1NTgzMTYwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f28e1d77741c9',t:'MTc1NTgzMjA0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
