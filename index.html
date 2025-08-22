@@ -275,6 +275,11 @@
                                 <span class="text-lg">📥</span>
                                 <span class="text-main">डेटा इम्पोर्ट करें</span>
                             </button>
+                            <hr class="my-2">
+                            <button onclick="printAllProducts()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center space-x-2 text-sm">
+                                <span class="text-lg">🖨️</span>
+                                <span class="text-main">सभी प्रोडक्ट्स प्रिंट करें</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -547,6 +552,9 @@
             displayBillHistory();
             autoSave();
             
+            // Set shopping as default page
+            showSection('shopping');
+            
             // Close menu when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('#menuDropdown') && !e.target.closest('button[onclick="toggleMenu()"]')) {
@@ -700,9 +708,9 @@
             document.getElementById('historySection').classList.add('hidden');
             
             // Remove active class from all tabs
-            document.getElementById('storeTab').className = 'flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50';
-            document.getElementById('shoppingTab').className = 'flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50';
-            document.getElementById('historyTab').className = 'flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50';
+            document.getElementById('storeTab').className = 'flex-1 py-3 px-3 text-center font-semibold text-light hover:bg-gray-50';
+            document.getElementById('shoppingTab').className = 'flex-1 py-3 px-3 text-center font-semibold text-light hover:bg-gray-50';
+            document.getElementById('historyTab').className = 'flex-1 py-3 px-3 text-center font-semibold text-light hover:bg-gray-50';
             
             // Show selected section
             document.getElementById(section + 'Section').classList.remove('hidden');
@@ -713,7 +721,7 @@
             const icons = { store: '🏪', shopping: '🛒', history: '📋' };
             const labels = { store: 'स्टोर', shopping: 'शॉपिंग', history: 'हिस्ट्री' };
             
-            activeTab.className = 'flex-1 py-4 px-4 text-center font-semibold text-blue-600 border-b-3 border-blue-600 bg-blue-50';
+            activeTab.className = 'flex-1 py-3 px-3 text-center font-semibold primary-text border-b-2 primary-bg text-white';
             activeTab.innerHTML = `${icons[section]} ${labels[section]}`;
         }
 
@@ -1360,6 +1368,132 @@
             });
         }
 
+        // Print all products function
+        function printAllProducts() {
+            document.getElementById('menuDropdown').classList.add('hidden');
+            
+            if (Object.keys(products).length === 0) {
+                showToast('❌ कोई प्रोडक्ट नहीं मिला!', 'error');
+                return;
+            }
+
+            // Create canvas for image generation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Calculate canvas height based on products count
+            const productCount = Object.keys(products).length;
+            canvas.width = 600;
+            canvas.height = 200 + (productCount * 120) + 100; // Header + products + footer
+            
+            // White background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text properties
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'center';
+            
+            let y = 50;
+            
+            // Store name
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText(storeName, canvas.width / 2, y);
+            y += 40;
+            
+            // Title
+            ctx.font = 'bold 20px Arial';
+            ctx.fillText('📦 सभी प्रोडक्ट्स की सूची', canvas.width / 2, y);
+            y += 30;
+            
+            // Date
+            ctx.font = '14px Arial';
+            ctx.fillText(`📅 ${new Date().toLocaleString('hi-IN')}`, canvas.width / 2, y);
+            y += 40;
+            
+            // Line separator
+            ctx.beginPath();
+            ctx.moveTo(50, y);
+            ctx.lineTo(canvas.width - 50, y);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            y += 30;
+            
+            // Products
+            ctx.textAlign = 'left';
+            Object.values(products).forEach((product, index) => {
+                // Product number
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(`${index + 1}. ${product.name}`, 60, y);
+                y += 25;
+                
+                // Price
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#008000';
+                ctx.fillText(`💰 कीमत: ₹${product.price}`, 80, y);
+                y += 20;
+                
+                // Barcode
+                ctx.fillStyle = '#000080';
+                if (product.barcode) {
+                    ctx.fillText(`🔢 बारकोड: ${product.barcode}`, 80, y);
+                } else {
+                    ctx.fillText(`🔢 बारकोड: ${product.id}`, 80, y);
+                }
+                y += 20;
+                
+                // Details
+                ctx.fillStyle = '#666666';
+                if (product.details) {
+                    const details = product.details.length > 50 ? product.details.substring(0, 50) + '...' : product.details;
+                    ctx.fillText(`📝 विवरण: ${details}`, 80, y);
+                }
+                y += 20;
+                
+                // Date added
+                ctx.fillStyle = '#999999';
+                ctx.font = '12px Arial';
+                if (product.dateAdded) {
+                    ctx.fillText(`📅 जोड़ा गया: ${product.dateAdded}`, 80, y);
+                }
+                y += 30;
+                
+                // Separator line
+                if (index < Object.keys(products).length - 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(60, y);
+                    ctx.lineTo(canvas.width - 60, y);
+                    ctx.strokeStyle = '#cccccc';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    y += 20;
+                }
+                
+                ctx.fillStyle = '#000000';
+            });
+            
+            // Footer
+            y += 30;
+            ctx.textAlign = 'center';
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#666666';
+            ctx.fillText(`कुल प्रोडक्ट्स: ${productCount}`, canvas.width / 2, y);
+            y += 25;
+            ctx.fillText('🙏 धन्यवाद!', canvas.width / 2, y);
+            
+            // Convert canvas to image and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${storeName}_all_products_${Date.now()}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('🖨️ सभी प्रोडक्ट्स की लिस्ट डाउनलोड हो गई!', 'success');
+            });
+        }
+
         // Data import/export
         function exportData() {
             document.getElementById('menuDropdown').classList.add('hidden');
@@ -1418,5 +1552,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f76dd54901432',t:'MTc1NTgzNTIzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f7b58c222cc07',t:'MTc1NTgzNTQyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
