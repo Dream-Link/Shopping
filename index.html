@@ -125,6 +125,10 @@
                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                 <span>बिल हिस्ट्री क्लियर करें</span>
                             </button>
+                            <button onclick="resetApplication()" class="w-full text-left px-3 py-2 bg-red-50 hover:bg-red-100 rounded-lg flex items-center space-x-3 text-sm text-red-700 font-bold">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                                 <span>एप्लीकेशन रीसेट करें</span>
+                             </button>
                         </div>
                     </div>
                 </div>
@@ -165,7 +169,27 @@
         </div>
 
         <div id="storeSection" class="hidden">
-             <h2 class="text-2xl md:text-3xl font-bold mb-6">📦 स्टोर मैनेजमेंट</h2>
+             <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold">📦 स्टोर मैनेजमेंट</h2>
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="relative">
+                        <input type="text" id="storeSearchInput" placeholder="प्रोडक्ट खोजें..." class="modern-input p-2 pl-8 text-sm w-32 sm:w-40" onkeyup="searchAndSortProducts()">
+                        <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <select id="sortOrderSelect" class="modern-input p-2 text-sm" onchange="searchAndSortProducts()">
+                            <option value="date-desc">सबसे नया</option>
+                            <option value="date-asc">सबसे पुराना</option>
+                            <option value="name-asc">नाम (A-Z)</option>
+                            <option value="name-desc">नाम (Z-A)</option>
+                            <option value="price-desc">कीमत (महंगा)</option>
+                            <option value="price-asc">कीमत (सस्ता)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
              <div id="productsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 </div>
         </div>
@@ -175,16 +199,17 @@
                 <div class="lg:col-span-2">
                     <div class="modern-card p-4 md:p-6 sticky top-20">
                          <h3 class="text-lg font-bold mb-4">प्रोडक्ट जोड़ें</h3>
-                         <div class="relative mb-3">
-                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            </div>
-                            <input type="text" id="searchProduct" placeholder="प्रोडक्ट खोजें या बारकोड टाइप करें" class="w-full p-3 pl-10 modern-input text-sm" onkeyup="searchProducts(this.value)">
+                         <div class="flex items-center gap-2 mb-3">
+                             <div class="relative flex-grow">
+                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                </div>
+                                <input type="text" id="searchProduct" placeholder="प्रोडक्ट खोजें..." class="w-full p-3 pl-10 modern-input text-sm" onkeyup="searchProducts(this.value)">
+                             </div>
+                             <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="primary-gradient text-white p-3 rounded-lg font-semibold modern-btn text-sm flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h-1m-2-11h1m-1 11h1M4 12H3m11 6v-1m-2 2v1m-7-2v1M7.5 7.5h9v9h-9v-9z" /></svg>
+                            </button>
                          </div>
-                         <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="w-full primary-gradient text-white py-3 px-4 rounded-lg font-semibold modern-btn text-sm flex items-center justify-center space-x-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h-1m-2-11h1m-1 11h1M4 12H3m11 6v-1m-2 2v1m-7-2v1M7.5 7.5h9v9h-9v-9z" /></svg>
-                            <span>बारकोड स्कैन करें</span>
-                        </button>
                         
                         <div id="shoppingScanner" class="scanner-container hidden my-3">
                             <div id="shoppingReader" class="relative" style="width: 100%; height: 250px;"></div>
@@ -411,7 +436,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('storeName').textContent = storeName;
             applyTheme(currentTheme);
-            displayProducts();
+            searchAndSortProducts();
             displayBillHistory();
             updateDashboardStats();
             autoSave();
@@ -466,7 +491,7 @@
             toast.className = `fixed top-20 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in`;
             toast.textContent = message;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 1500);
+            setTimeout(() => { toast.remove(); }, 2500); // Increased timeout for error messages
         }
 
         function showSection(section) {
@@ -480,7 +505,10 @@
             document.getElementById(section + 'TabMobile').classList.add('active');
             document.getElementById(section + 'TabDesktop').classList.add('active');
             document.getElementById('floatingAddBtn').classList.toggle('hidden', section !== 'store');
-            if (section !== 'shopping' && section !== 'store') {
+            
+            if (section === 'store') {
+                searchAndSortProducts();
+            } else if (isScanning) {
                 stopScanning('shopping');
                 stopScanning('store');
             }
@@ -497,6 +525,7 @@
             }
         }
         
+        // === BARCODE SCANNER IMPROVED ===
         function startScanning(section) {
             if (isScanning) return;
             const scannerDiv = document.getElementById(section + 'Scanner');
@@ -506,34 +535,39 @@
             html5QrCode = new Html5Qrcode(readerElement.id);
 
             const config = { 
-                fps: 20, 
+                fps: 10, 
                 qrbox: (viewfinderWidth, viewfinderHeight) => ({
-                    width: Math.min(viewfinderWidth, viewfinderHeight) * 0.7,
-                    height: Math.min(viewfinderWidth, viewfinderHeight) * 0.7
+                    width: Math.min(viewfinderWidth, viewfinderHeight) * 0.8,
+                    height: Math.min(viewfinderWidth, viewfinderHeight) * 0.5
                 }),
                 rememberLastUsedCamera: true,
                 supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
             };
             
-            html5QrCode.start({ facingMode: 'environment' }, config,
-                (decodedText) => {
-                    if (section === 'store') {
-                        document.getElementById('productBarcode').value = decodedText;
-                        fetchProductDetails(decodedText);
-                    } else if (section === 'shopping') {
-                        addToBill(decodedText);
-                    }
-                    stopScanning(section);
+            const onScanSuccess = (decodedText, decodedResult) => {
+                stopScanning(section);
+                if (section === 'store') {
+                    document.getElementById('productBarcode').value = decodedText;
+                    fetchProductDetails(decodedText);
                     showToast('📱 बारकोड स्कैन हो गया!', 'success');
-                },
-                (errorMessage) => {}
-            ).then(() => {
+                } else if (section === 'shopping') {
+                    // VALIDATION LOGIC ADDED
+                    if (products[decodedText]) {
+                        addToBill(decodedText); // This function already shows a success toast
+                    } else {
+                        showToast(`❌ बारकोड '${decodedText}' स्टोर में नहीं मिला!`, 'error');
+                    }
+                }
+            };
+
+            html5QrCode.start({ facingMode: 'environment' }, config, onScanSuccess)
+            .then(() => {
                 const video = readerElement.querySelector('video');
                 if (video && video.srcObject) {
                     currentStream = video.srcObject;
                 }
             }).catch(err => {
-                showToast('❌ कैमरा एक्सेस नहीं हो सका', 'error');
+                showToast('❌ कैमरा एक्सेस नहीं हो सका। कृपया अनुमति दें।', 'error');
                 stopScanning(section);
             });
         }
@@ -541,7 +575,10 @@
             if (html5QrCode && isScanning) {
                 html5QrCode.stop().catch(err => {});
             }
-            document.getElementById(section + 'Scanner').classList.add('hidden');
+            const scannerDiv = document.getElementById(section + 'Scanner');
+            if (scannerDiv) {
+                scannerDiv.classList.add('hidden');
+            }
             isScanning = false;
             flashlightEnabled = false;
             currentStream = null;
@@ -646,44 +683,82 @@
             const details = document.getElementById('productDetails').value.trim();
             if (!name || isNaN(price)) { showToast('❌ कृपया प्रोडक्ट का नाम और कीमत डालें', 'error'); return; }
             const productId = barcode || Date.now().toString();
-            products[productId] = { id: productId, barcode: barcode, name, price, details, dateAdded: new Date().toLocaleString('hi-IN') };
-            closeAddModal(); displayProducts();
+            products[productId] = { id: productId, barcode: barcode, name, price, details, dateAdded: new Date().toISOString() };
+            closeAddModal(); 
+            searchAndSortProducts();
             showToast('✅ प्रोडक्ट सफलतापूर्वक जोड़ा गया!', 'success');
         }
 
-        function displayProducts() {
+        function searchAndSortProducts() {
+            const searchQuery = document.getElementById('storeSearchInput').value.toLowerCase();
+            const sortBy = document.getElementById('sortOrderSelect').value;
+            
+            let productArray = Object.values(products);
+
+            if (searchQuery) {
+                productArray = productArray.filter(p =>
+                    p.name.toLowerCase().includes(searchQuery) ||
+                    (p.barcode && p.barcode.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            productArray.sort((a, b) => {
+                switch (sortBy) {
+                    case 'name-asc':
+                        return a.name.localeCompare(b.name);
+                    case 'name-desc':
+                        return b.name.localeCompare(a.name);
+                    case 'price-asc':
+                        return a.price - b.price;
+                    case 'price-desc':
+                        return b.price - a.price;
+                    case 'date-asc':
+                        return new Date(a.dateAdded) - new Date(b.dateAdded);
+                    case 'date-desc':
+                    default:
+                        return new Date(b.dateAdded) - new Date(a.dateAdded);
+                }
+            });
+
+            displayProducts(productArray);
+        }
+
+        function displayProducts(productsToDisplay) {
             const list = document.getElementById('productsList');
             list.innerHTML = '';
-            if (Object.keys(products).length === 0) {
+            
+            const productArray = productsToDisplay || Object.values(products);
+
+            if (productArray.length === 0) {
                 list.innerHTML = '<p class="text-center text-gray-500 col-span-full py-10">कोई प्रोडक्ट नहीं मिला। "+" बटन दबाकर जोड़ें।</p>';
-                return;
-            }
-            Object.values(products).forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'modern-card p-4 flex flex-col justify-between';
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-bold text-lg mb-1 flex-1">${p.name}</h4>
-                            <div class="font-mono text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded">#${p.barcode || p.id}</div>
+            } else {
+                 productArray.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'modern-card p-4 flex flex-col justify-between';
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-lg mb-1 flex-1">${p.name}</h4>
+                                <div class="font-mono text-xs font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded">#${p.barcode || p.id}</div>
+                            </div>
+                            <p class="secondary-text font-bold text-xl mb-2">₹${p.price}</p>
+                            ${p.details ? `<p class="text-sm text-gray-600 mb-3">${p.details}</p>` : ''}
                         </div>
-                        <p class="secondary-text font-bold text-xl mb-2">₹${p.price}</p>
-                        ${p.details ? `<p class="text-sm text-gray-600 mb-3">${p.details}</p>` : ''}
-                    </div>
-                    <div class="border-t pt-3 mt-auto grid grid-cols-3 gap-2 text-xs">
-                        <button onclick="addToBillFromStore('${p.id}')" class="bg-green-100 text-green-700 font-semibold py-2 rounded-md hover:bg-green-200 transition-colors flex items-center justify-center space-x-1">
-                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> <span>जोड़ें</span>
-                        </button>
-                        <button onclick="editProduct('${p.id}')" class="bg-blue-100 text-blue-700 font-semibold py-2 rounded-md hover:bg-blue-200 transition-colors flex items-center justify-center space-x-1">
-                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg> <span>एडिट</span>
-                        </button>
-                        <button onclick="deleteProduct('${p.id}')" class="bg-red-100 text-red-700 font-semibold py-2 rounded-md hover:bg-red-200 transition-colors flex items-center justify-center space-x-1">
-                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> <span>डिलीट</span>
-                        </button>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
+                        <div class="border-t pt-3 mt-auto grid grid-cols-3 gap-2 text-xs">
+                            <button onclick="addToBillFromStore('${p.id}')" class="bg-green-100 text-green-700 font-semibold py-2 rounded-md hover:bg-green-200 transition-colors flex items-center justify-center space-x-1">
+                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> <span>जोड़ें</span>
+                            </button>
+                            <button onclick="editProduct('${p.id}')" class="bg-blue-100 text-blue-700 font-semibold py-2 rounded-md hover:bg-blue-200 transition-colors flex items-center justify-center space-x-1">
+                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z"></path></svg> <span>एडिट</span>
+                            </button>
+                            <button onclick="deleteProduct('${p.id}')" class="bg-red-100 text-red-700 font-semibold py-2 rounded-md hover:bg-red-200 transition-colors flex items-center justify-center space-x-1">
+                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> <span>डिलीट</span>
+                            </button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            }
             updateDashboardStats();
         }
 
@@ -705,7 +780,9 @@
             products[currentEditingProduct].name = name;
             products[currentEditingProduct].price = price;
             products[currentEditingProduct].details = details;
-            closeEditModal(); displayProducts(); showToast('✅ प्रोडक्ट अपडेट हो गया!', 'success');
+            closeEditModal(); 
+            searchAndSortProducts(); 
+            showToast('✅ प्रोडक्ट अपडेट हो गया!', 'success');
         }
 
         function closeEditModal() {
@@ -714,7 +791,9 @@
 
         function deleteProduct(productId) {
             if (confirm('🗑️ क्या आप इस प्रोडक्ट को डिलीट करना चाहते हैं?')) {
-                delete products[productId]; displayProducts(); showToast('✅ प्रोडक्ट डिलीट हो गया!', 'success');
+                delete products[productId]; 
+                searchAndSortProducts(); 
+                showToast('✅ प्रोडक्ट डिलीट हो गया!', 'success');
             }
         }
 
@@ -777,8 +856,14 @@
             displayBillItems(); updateTotal();
         }
 
+        // === REMOVE FROM BILL IMPROVED WITH WARNING ===
         function removeFromBill(index) {
-            billItems.splice(index, 1); displayBillItems(); updateTotal();
+            const item = billItems[index];
+            if (confirm(`❓ क्या आप वाकई "${item.name}" को बिल से हटाना चाहते हैं?`)) {
+                billItems.splice(index, 1); 
+                displayBillItems(); 
+                updateTotal();
+            }
         }
 
         function updateTotal() {
@@ -790,7 +875,7 @@
         }
 
         function clearBill() {
-            if (billItems.length > 0 && confirm('🗑️ क्या आप बिल क्लियर करना चाहते हैं?')) {
+            if (billItems.length > 0 && confirm('🗑️ क्या आप पूरा बिल क्लियर करना चाहते हैं?')) {
                 billItems = []; document.getElementById('customerName').value = '';
                 displayBillItems(); updateTotal(); showToast('✅ बिल क्लियर हो गया!', 'success');
             }
@@ -897,9 +982,27 @@
         function clearHistory() {
             toggleMenu();
             if (billHistory.length === 0) { showToast('❌ कोई बिल हिस्ट्री नहीं है!', 'error'); return; }
-            if (confirm(`🚨 अंतिम चेतावनी!\n\nआप ${billHistory.length} बिल्स को हमेशा के लिए डिलीट करने वाले हैं।\n\nक्या आप निश्चित हैं?`)) {
+            if (confirm(`🚨 क्या आप वाकई सभी ${billHistory.length} बिल्स को हमेशा के लिए डिलीट करना चाहते हैं?`)) {
                 billHistory = []; localStorage.setItem('billHistory', JSON.stringify(billHistory));
                 displayBillHistory(); showToast('✅ बिल हिस्ट्री क्लियर हो गई!', 'success');
+            }
+        }
+        
+        // === NEW RESET FUNCTION WITH 5 WARNINGS ===
+        function resetApplication() {
+            toggleMenu();
+            if (confirm("🚨 चेतावनी 1/5: क्या आप वाकई एप्लीकेशन को रीसेट करना चाहते हैं?")) {
+                if (confirm("🚨 चेतावनी 2/5: ऐसा करने से आपके सभी प्रोडक्ट्स, बिल हिस्ट्री और सेटिंग्स हमेशा के लिए डिलीट हो जाएंगे।")) {
+                    if (confirm("🚨 चेतावनी 3/5: इस प्रक्रिया को पूर्ववत नहीं किया जा सकता।")) {
+                        if (confirm("🚨 चेतावनी 4/5: कृपया सुनिश्चित करें कि आपने अपने डेटा का बैकअप ले लिया है।")) {
+                            if (confirm("🚨 अंतिम चेतावनी 5/5: क्या आप निश्चित रूप से सब कुछ डिलीट करना चाहते हैं?")) {
+                                localStorage.clear();
+                                alert("✅ एप्लीकेशन सफलतापूर्वक रीसेट हो गया है। पेज अब रीलोड होगा।");
+                                location.reload();
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -928,7 +1031,9 @@
                         if (data.currentTheme) currentTheme = data.currentTheme;
                         if (data.notes) notes = data.notes;
                         document.getElementById('storeName').textContent = storeName;
-                        applyTheme(currentTheme); displayProducts(); displayBillHistory();
+                        applyTheme(currentTheme); 
+                        searchAndSortProducts(); 
+                        displayBillHistory();
                         showToast('✅ डेटा सफलतापूर्वक इम्पोर्ट हो गया!', 'success');
                     }
                 } catch (error) { showToast('❌ गलत फाइल फॉर्मेट!', 'error'); }
