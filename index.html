@@ -138,36 +138,28 @@
         
         <div id="homeSection" class="fade-in">
             <h2 class="text-2xl md:text-3xl font-bold mb-6">डैशबोर्ड</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="modern-card p-6 flex items-center space-x-4">
-                     <div class="p-3 rounded-full secondary-bg text-white">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+            <div class="grid grid-cols-2 gap-4">
+                <div onclick="showSection('store')" class="modern-card p-4 flex flex-col items-center justify-center text-center cursor-pointer border border-transparent hover:border-[var(--secondary)]">
+                    <div class="p-2 rounded-full secondary-bg text-white mb-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">कुल प्रोडक्ट्स</p>
-                        <p id="totalProductsStat" class="text-3xl font-bold">0</p>
-                    </div>
+                    <p class="text-sm font-medium text-gray-600">कुल प्रोडक्ट्स</p>
+                    <p id="totalProductsStat" class="text-2xl font-bold">0</p>
                 </div>
-                <div class="modern-card p-6 flex items-center space-x-4">
-                    <div class="p-3 rounded-full primary-bg text-white">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <div onclick="showSection('history')" class="modern-card p-4 flex flex-col items-center justify-center text-center cursor-pointer border border-transparent hover:border-[var(--primary)]">
+                    <div class="p-2 rounded-full primary-bg text-white mb-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-500">सेव किए गए बिल</p>
-                        <p id="totalBillsStat" class="text-3xl font-bold">0</p>
-                    </div>
+                    <p class="text-sm font-medium text-gray-600">सेव बिल</p>
+                    <p id="totalBillsStat" class="text-2xl font-bold">0</p>
                 </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button onclick="showAddModal(); showSection('store');" class="modern-card p-8 text-center hover:border-[var(--primary)] border">
-                    <div class="text-4xl mb-3 primary-text">📦</div>
-                    <h3 class="text-lg font-semibold">नया प्रोडक्ट जोड़ें</h3>
-                    <p class="text-sm text-gray-500">अपने स्टोर में एक नया आइटम जोड़ें</p>
+                 <button onclick="showAddModal(); showSection('store');" class="modern-card p-4 text-center hover:border-[var(--primary)] border flex flex-col items-center justify-center">
+                    <div class="text-3xl mb-2">📦</div>
+                    <h3 class="text-sm font-semibold">नया प्रोडक्ट जोड़ें</h3>
                 </button>
-                 <button onclick="showSection('shopping')" class="modern-card p-8 text-center hover:border-[var(--secondary)] border">
-                    <div class="text-4xl mb-3 secondary-text">🛒</div>
-                    <h3 class="text-lg font-semibold">नया बिल बनाएं</h3>
-                    <p class="text-sm text-gray-500">ग्राहक के लिए बिलिंग शुरू करें</p>
+                 <button onclick="showSection('shopping')" class="modern-card p-4 text-center hover:border-[var(--secondary)] border flex flex-col items-center justify-center">
+                    <div class="text-3xl mb-2">🛒</div>
+                    <h3 class="text-sm font-semibold">नया बिल बनाएं</h3>
                 </button>
             </div>
         </div>
@@ -510,7 +502,9 @@
             const scannerDiv = document.getElementById(section + 'Scanner');
             scannerDiv.classList.remove('hidden');
             isScanning = true;
-            html5QrCode = new Html5Qrcode(section + 'Reader');
+            const readerElement = document.getElementById(section + 'Reader');
+            html5QrCode = new Html5Qrcode(readerElement.id);
+
             const config = { 
                 fps: 20, 
                 qrbox: (viewfinderWidth, viewfinderHeight) => ({
@@ -534,7 +528,7 @@
                 },
                 (errorMessage) => {}
             ).then(() => {
-                const video = document.querySelector(`#${section}Reader video`);
+                const video = readerElement.querySelector('video');
                 if (video && video.srcObject) {
                     currentStream = video.srcObject;
                 }
