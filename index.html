@@ -245,8 +245,8 @@
             <div class="flex items-center justify-between">
                 <h1 id="storeName" class="text-xl font-bold primary-text">मेरा स्टोर</h1>
                 <div class="relative">
-                    <button onclick="toggleMenu()" class="p-2 primary-gradient text-white rounded-lg modern-btn">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button onclick="toggleMenu()" class="p-2 text-gray-600 hover:text-gray-800 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
@@ -374,8 +374,15 @@
         <div class="modern-card p-4 mb-3">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-lg font-bold text-main">🛍️ बिल</h3>
-                <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="primary-gradient text-white py-1 px-3 rounded-lg font-semibold modern-btn text-sm">
-                    + स्कैन
+            </div>
+            
+            <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम (वैकल्पिक)" class="w-full p-3 modern-input mb-3 text-sm">
+            
+            <!-- Single line for search and scan -->
+            <div class="flex gap-2 mb-3">
+                <input type="text" id="searchProduct" placeholder="🔍 प्रोडक्ट खोजें" class="flex-1 p-3 modern-input text-sm" onkeyup="searchProducts(this.value)">
+                <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="primary-gradient text-white py-3 px-4 rounded-lg font-semibold modern-btn text-sm whitespace-nowrap">
+                    📱 स्कैन
                 </button>
             </div>
             
@@ -388,9 +395,6 @@
                     ❌ स्कैन बंद करें
                 </button>
             </div>
-
-            <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम (वैकल्पिक)" class="w-full p-3 modern-input mb-3 text-sm">
-            <input type="text" id="searchProduct" placeholder="🔍 प्रोडक्ट खोजें" class="w-full p-3 modern-input mb-3 text-sm" onkeyup="searchProducts(this.value)">
             
             <div id="searchResults" class="hidden mb-3 space-y-2">
                 <!-- Search results will appear here -->
@@ -902,26 +906,69 @@
             Object.values(products).forEach(product => {
                 const productDiv = document.createElement('div');
                 productDiv.className = 'bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300';
+                
+                // Add long press functionality
+                let pressTimer;
+                productDiv.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => showProductMenu(product.id, e), 500);
+                });
+                productDiv.addEventListener('touchend', () => {
+                    clearTimeout(pressTimer);
+                });
+                productDiv.addEventListener('mousedown', (e) => {
+                    pressTimer = setTimeout(() => showProductMenu(product.id, e), 500);
+                });
+                productDiv.addEventListener('mouseup', () => {
+                    clearTimeout(pressTimer);
+                });
+                
                 productDiv.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 text-lg">${product.name}</h4>
-                            <p class="text-green-600 font-bold text-xl">₹${product.price}</p>
-                            ${product.barcode ? `<p class="text-xs text-gray-500 bg-gray-200 inline-block px-2 py-1 rounded mt-1">🔢 ${product.barcode}</p>` : ''}
-                            ${product.details ? `<p class="text-sm text-gray-600 mt-2">${product.details}</p>` : ''}
+                            <h4 class="font-bold text-gray-800 text-lg text-left">${product.name}</h4>
+                            <p class="text-green-600 font-bold text-xl text-left">₹${product.price}</p>
+                            ${product.details ? `<p class="text-sm text-gray-600 mt-2 text-left">${product.details}</p>` : ''}
                         </div>
-                        <div class="flex space-x-2 ml-3">
-                            <button onclick="editProduct('${product.id}')" class="p-2 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition-colors">
-                                ✏️
-                            </button>
-                            <button onclick="deleteProduct('${product.id}')" class="p-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors">
-                                🗑️
-                            </button>
+                        <div class="text-right">
+                            <div class="font-mono text-lg font-bold text-gray-800 bg-white px-3 py-2 rounded-lg border-2 border-gray-300">
+                                ${product.barcode || product.id}
+                            </div>
                         </div>
                     </div>
                 `;
                 productsList.appendChild(productDiv);
             });
+        }
+
+        // Product menu for long press
+        function showProductMenu(productId, event) {
+            event.preventDefault();
+            const menu = document.createElement('div');
+            menu.className = 'fixed bg-white border rounded-lg shadow-xl z-50 p-2';
+            menu.style.left = (event.clientX || event.touches[0].clientX) + 'px';
+            menu.style.top = (event.clientY || event.touches[0].clientY) + 'px';
+            
+            menu.innerHTML = `
+                <button onclick="editProduct('${productId}'); removeProductMenu()" class="block w-full text-left px-3 py-2 hover:bg-blue-100 rounded text-sm">
+                    ✏️ एडिट करें
+                </button>
+                <button onclick="deleteProduct('${productId}'); removeProductMenu()" class="block w-full text-left px-3 py-2 hover:bg-red-100 rounded text-sm">
+                    🗑️ डिलीट करें
+                </button>
+            `;
+            
+            document.body.appendChild(menu);
+            
+            // Remove menu on click outside
+            setTimeout(() => {
+                document.addEventListener('click', removeProductMenu);
+            }, 100);
+        }
+
+        function removeProductMenu() {
+            const menu = document.querySelector('.fixed.bg-white.border.rounded-lg.shadow-xl');
+            if (menu) menu.remove();
+            document.removeEventListener('click', removeProductMenu);
         }
 
         function editProduct(productId) {
@@ -1034,17 +1081,17 @@
             }
 
             billItemsDiv.innerHTML = billItems.map((item, index) => `
-                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-xl border border-green-200">
                     <div class="flex justify-between items-center">
                         <div class="flex-1">
-                            <h4 class="font-bold text-gray-800">${item.name}</h4>
-                            <p class="text-sm text-gray-600">₹${item.price} × ${item.quantity} = <span class="font-bold text-green-600">₹${(item.price * item.quantity).toFixed(2)}</span></p>
+                            <h4 class="font-bold text-gray-800 text-sm">${item.name}</h4>
+                            <p class="text-xs text-gray-600">₹${item.price} × ${item.quantity} = <span class="font-bold text-green-600">₹${(item.price * item.quantity).toFixed(2)}</span></p>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="updateQuantity(${index}, -1)" class="w-8 h-8 bg-red-500 text-white rounded-full text-sm font-bold hover:bg-red-600 transition-colors">-</button>
-                            <span class="w-8 text-center font-bold">${item.quantity}</span>
-                            <button onclick="updateQuantity(${index}, 1)" class="w-8 h-8 bg-green-500 text-white rounded-full text-sm font-bold hover:bg-green-600 transition-colors">+</button>
-                            <button onclick="removeFromBill(${index})" class="w-8 h-8 bg-gray-500 text-white rounded-full text-sm font-bold hover:bg-gray-600 transition-colors">×</button>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="updateQuantity(${index}, -1)" class="w-6 h-6 bg-red-500 text-white rounded-full text-xs font-bold hover:bg-red-600 transition-colors flex items-center justify-center">-</button>
+                            <span class="w-6 text-center font-bold text-xs">${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)" class="w-6 h-6 bg-green-500 text-white rounded-full text-xs font-bold hover:bg-green-600 transition-colors flex items-center justify-center">+</button>
+                            <button onclick="removeFromBill(${index})" class="w-6 h-6 bg-gray-500 text-white rounded-full text-xs font-bold hover:bg-gray-600 transition-colors flex items-center justify-center">×</button>
                         </div>
                     </div>
                 </div>
@@ -1234,25 +1281,43 @@
             }
 
             historyDiv.innerHTML = billHistory.map(bill => `
-                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200">
-                    <div class="flex justify-between items-start mb-3">
-                        <div>
-                            <h4 class="font-bold text-gray-800">🧾 बिल #${bill.id}</h4>
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200 cursor-pointer hover:shadow-md transition-all" onclick="toggleBillDetails(${bill.id})">
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            ${bill.customerName ? `<h4 class="font-bold text-gray-800 text-lg">${bill.customerName}</h4>` : `<h4 class="font-bold text-gray-800 text-lg">बिल #${bill.id}</h4>`}
                             <p class="text-sm text-gray-600">📅 ${bill.date}</p>
-                            ${bill.customerName ? `<p class="text-sm text-blue-600">👤 ${bill.customerName}</p>` : ''}
                         </div>
-                        <div class="text-right">
-                            <p class="font-bold text-green-600 text-xl">₹${bill.total.toFixed(2)}</p>
-                            <button onclick="printOldBill(${bill.id})" class="text-xs bg-blue-500 text-white px-3 py-1 rounded-lg mt-1 font-semibold hover:bg-blue-600 transition-colors">
-                                📸 डाउनलोड
+                        <div class="text-right flex items-center space-x-2">
+                            <div>
+                                <p class="font-bold text-green-600 text-xl">₹${bill.total.toFixed(2)}</p>
+                            </div>
+                            <button onclick="event.stopPropagation(); printOldBill(${bill.id})" class="text-blue-500 hover:text-blue-700 text-xl">
+                                📥
                             </button>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-600 bg-white p-2 rounded-lg">
-                        <strong>आइटम्स:</strong> ${bill.items.map(item => `${item.name} (${item.quantity})`).join(', ')}
+                    <div id="billDetails_${bill.id}" class="hidden mt-3 pt-3 border-t border-purple-200">
+                        <div class="text-sm text-gray-600 bg-white p-3 rounded-lg">
+                            <strong class="block mb-2">📦 आइटम्स:</strong>
+                            ${bill.items.map(item => `
+                                <div class="flex justify-between py-1">
+                                    <span>${item.name} × ${item.quantity}</span>
+                                    <span class="font-semibold">₹${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                            <div class="border-t pt-2 mt-2 flex justify-between font-bold text-green-600">
+                                <span>कुल राशि:</span>
+                                <span>₹${bill.total.toFixed(2)}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function toggleBillDetails(billId) {
+            const detailsDiv = document.getElementById(`billDetails_${billId}`);
+            detailsDiv.classList.toggle('hidden');
         }
 
         function printOldBill(billId) {
@@ -1377,121 +1442,152 @@
                 return;
             }
 
-            // Create canvas for image generation
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+            // Create HTML content for PDF
+            const printContent = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>${storeName} - सभी प्रोडक्ट्स</title>
+                    <style>
+                        @page { margin: 20mm; }
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            line-height: 1.4; 
+                            color: #333;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .header { 
+                            text-align: center; 
+                            border-bottom: 3px solid #333; 
+                            padding-bottom: 20px; 
+                            margin-bottom: 30px;
+                        }
+                        .store-name { 
+                            font-size: 28px; 
+                            font-weight: bold; 
+                            color: #2563eb;
+                            margin-bottom: 10px;
+                        }
+                        .title { 
+                            font-size: 20px; 
+                            font-weight: bold; 
+                            margin-bottom: 10px;
+                        }
+                        .date { 
+                            font-size: 14px; 
+                            color: #666;
+                        }
+                        .product { 
+                            border: 2px solid #e5e7eb; 
+                            border-radius: 12px; 
+                            padding: 20px; 
+                            margin-bottom: 20px;
+                            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+                            break-inside: avoid;
+                        }
+                        .product-header { 
+                            display: flex; 
+                            justify-content: space-between; 
+                            align-items: flex-start;
+                            margin-bottom: 15px;
+                        }
+                        .product-name { 
+                            font-size: 18px; 
+                            font-weight: bold; 
+                            color: #1f2937;
+                            flex: 1;
+                        }
+                        .product-price { 
+                            font-size: 20px; 
+                            font-weight: bold; 
+                            color: #059669;
+                            margin-left: 20px;
+                        }
+                        .barcode-box {
+                            background: white;
+                            border: 2px solid #374151;
+                            border-radius: 8px;
+                            padding: 10px 15px;
+                            font-family: 'Courier New', monospace;
+                            font-size: 16px;
+                            font-weight: bold;
+                            text-align: center;
+                            margin: 10px 0;
+                            letter-spacing: 1px;
+                        }
+                        .product-details { 
+                            color: #4b5563; 
+                            margin-top: 10px;
+                            font-size: 14px;
+                        }
+                        .product-meta { 
+                            color: #9ca3af; 
+                            font-size: 12px; 
+                            margin-top: 10px;
+                            font-style: italic;
+                        }
+                        .footer { 
+                            text-align: center; 
+                            margin-top: 40px; 
+                            padding-top: 20px; 
+                            border-top: 2px solid #e5e7eb;
+                            color: #6b7280;
+                        }
+                        .total-count {
+                            font-size: 16px;
+                            font-weight: bold;
+                            color: #2563eb;
+                            margin-bottom: 10px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="store-name">${storeName}</div>
+                        <div class="title">📦 सभी प्रोडक्ट्स की सूची</div>
+                        <div class="date">📅 ${new Date().toLocaleString('hi-IN')}</div>
+                    </div>
+                    
+                    ${Object.values(products).map((product, index) => `
+                        <div class="product">
+                            <div class="product-header">
+                                <div class="product-name">${index + 1}. ${product.name}</div>
+                                <div class="product-price">₹${product.price}</div>
+                            </div>
+                            
+                            <div class="barcode-box">
+                                🔢 ${product.barcode || product.id}
+                            </div>
+                            
+                            ${product.details ? `<div class="product-details">📝 विवरण: ${product.details}</div>` : ''}
+                            
+                            ${product.dateAdded ? `<div class="product-meta">📅 जोड़ा गया: ${product.dateAdded}</div>` : ''}
+                        </div>
+                    `).join('')}
+                    
+                    <div class="footer">
+                        <div class="total-count">कुल प्रोडक्ट्स: ${Object.keys(products).length}</div>
+                        <div>🙏 धन्यवाद!</div>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
             
-            // Calculate canvas height based on products count
-            const productCount = Object.keys(products).length;
-            canvas.width = 600;
-            canvas.height = 200 + (productCount * 120) + 100; // Header + products + footer
+            // Wait for content to load then print
+            printWindow.onload = function() {
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
+            };
             
-            // White background
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Set text properties
-            ctx.fillStyle = '#000000';
-            ctx.textAlign = 'center';
-            
-            let y = 50;
-            
-            // Store name
-            ctx.font = 'bold 28px Arial';
-            ctx.fillText(storeName, canvas.width / 2, y);
-            y += 40;
-            
-            // Title
-            ctx.font = 'bold 20px Arial';
-            ctx.fillText('📦 सभी प्रोडक्ट्स की सूची', canvas.width / 2, y);
-            y += 30;
-            
-            // Date
-            ctx.font = '14px Arial';
-            ctx.fillText(`📅 ${new Date().toLocaleString('hi-IN')}`, canvas.width / 2, y);
-            y += 40;
-            
-            // Line separator
-            ctx.beginPath();
-            ctx.moveTo(50, y);
-            ctx.lineTo(canvas.width - 50, y);
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            y += 30;
-            
-            // Products
-            ctx.textAlign = 'left';
-            Object.values(products).forEach((product, index) => {
-                // Product number
-                ctx.font = 'bold 16px Arial';
-                ctx.fillText(`${index + 1}. ${product.name}`, 60, y);
-                y += 25;
-                
-                // Price
-                ctx.font = '14px Arial';
-                ctx.fillStyle = '#008000';
-                ctx.fillText(`💰 कीमत: ₹${product.price}`, 80, y);
-                y += 20;
-                
-                // Barcode
-                ctx.fillStyle = '#000080';
-                if (product.barcode) {
-                    ctx.fillText(`🔢 बारकोड: ${product.barcode}`, 80, y);
-                } else {
-                    ctx.fillText(`🔢 बारकोड: ${product.id}`, 80, y);
-                }
-                y += 20;
-                
-                // Details
-                ctx.fillStyle = '#666666';
-                if (product.details) {
-                    const details = product.details.length > 50 ? product.details.substring(0, 50) + '...' : product.details;
-                    ctx.fillText(`📝 विवरण: ${details}`, 80, y);
-                }
-                y += 20;
-                
-                // Date added
-                ctx.fillStyle = '#999999';
-                ctx.font = '12px Arial';
-                if (product.dateAdded) {
-                    ctx.fillText(`📅 जोड़ा गया: ${product.dateAdded}`, 80, y);
-                }
-                y += 30;
-                
-                // Separator line
-                if (index < Object.keys(products).length - 1) {
-                    ctx.beginPath();
-                    ctx.moveTo(60, y);
-                    ctx.lineTo(canvas.width - 60, y);
-                    ctx.strokeStyle = '#cccccc';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                    y += 20;
-                }
-                
-                ctx.fillStyle = '#000000';
-            });
-            
-            // Footer
-            y += 30;
-            ctx.textAlign = 'center';
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#666666';
-            ctx.fillText(`कुल प्रोडक्ट्स: ${productCount}`, canvas.width / 2, y);
-            y += 25;
-            ctx.fillText('🙏 धन्यवाद!', canvas.width / 2, y);
-            
-            // Convert canvas to image and download
-            canvas.toBlob(function(blob) {
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${storeName}_all_products_${Date.now()}.png`;
-                a.click();
-                URL.revokeObjectURL(url);
-                showToast('🖨️ सभी प्रोडक्ट्स की लिस्ट डाउनलोड हो गई!', 'success');
-            });
+            showToast('🖨️ PDF प्रिंट के लिए तैयार!', 'success');
         }
 
         // Data import/export
@@ -1552,5 +1648,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f7b58c222cc07',t:'MTc1NTgzNTQyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f975d049f3a27',t:'MTc1NTgzNjU2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
