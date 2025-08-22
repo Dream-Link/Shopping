@@ -755,67 +755,45 @@
             
             html5QrCode = new Html5Qrcode(section + 'Reader');
             
-            Html5Qrcode.getCameras().then(devices => {
-                if (devices && devices.length) {
-                    // Try to find back camera first
-                    let cameraId = devices[0].id;
-                    
-                    // Look for back camera (environment facing)
-                    const backCamera = devices.find(device => 
-                        device.label.toLowerCase().includes('back') || 
-                        device.label.toLowerCase().includes('rear') ||
-                        device.label.toLowerCase().includes('environment')
-                    );
-                    
-                    if (backCamera) {
-                        cameraId = backCamera.id;
-                    } else if (devices.length > 1) {
-                        cameraId = devices[devices.length - 1].id;
+            // Simplified and faster camera initialization
+            const config = {
+                fps: 15,
+                qrbox: { width: 160, height: 160 },
+                aspectRatio: 1.0,
+                disableFlip: false
+            };
+            
+            // Try environment camera first (faster than enumerating all devices)
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText, decodedResult) => {
+                    if (section === 'store') {
+                        document.getElementById('productBarcode').value = decodedText;
+                        fetchProductDetails(decodedText);
+                        showToast('📱 बारकोड स्कैन हो गया!', 'success');
+                    } else if (section === 'shopping') {
+                        addToBill(decodedText);
                     }
-                    
-                    const config = {
-                        fps: 20,
-                        qrbox: { width: 180, height: 180 },
-                        aspectRatio: 1.0,
-                        disableFlip: false,
-                        videoConstraints: {
-                            facingMode: "environment",
-                            focusMode: "continuous",
-                            advanced: [
-                                { focusMode: "continuous" },
-                                { focusDistance: { min: 0.1, max: 10 } }
-                            ]
-                        }
-                    };
-                    
-                    html5QrCode.start(
-                        cameraId,
-                        config,
-                        (decodedText, decodedResult) => {
-                            if (section === 'store') {
-                                document.getElementById('productBarcode').value = decodedText;
-                                fetchProductDetails(decodedText);
-                                showToast('📱 बारकोड स्कैन हो गया!', 'success');
-                            } else if (section === 'shopping') {
-                                addToBill(decodedText);
-                            }
-                            stopScanning(section);
-                        },
-                        (errorMessage) => {
-                            // Handle scan error silently
-                        }
-                    ).then(() => {
-                        // Store current stream for flashlight
-                        const video = document.querySelector(`#${section}Reader video`);
-                        if (video && video.srcObject) {
-                            currentStream = video.srcObject;
-                        }
-                    }).catch(err => {
-                        console.log('Error starting scanner:', err);
-                        // Fallback with basic constraints
+                    stopScanning(section);
+                },
+                (errorMessage) => {
+                    // Handle scan error silently
+                }
+            ).then(() => {
+                // Store current stream for flashlight
+                const video = document.querySelector(`#${section}Reader video`);
+                if (video && video.srcObject) {
+                    currentStream = video.srcObject;
+                }
+            }).catch(err => {
+                console.log('Error starting scanner:', err);
+                // Fallback to any available camera
+                Html5Qrcode.getCameras().then(devices => {
+                    if (devices && devices.length) {
                         html5QrCode.start(
-                            { facingMode: "environment" },
-                            { fps: 15, qrbox: { width: 180, height: 180 } },
+                            devices[0].id,
+                            { fps: 10, qrbox: { width: 150, height: 150 } },
                             (decodedText, decodedResult) => {
                                 if (section === 'store') {
                                     document.getElementById('productBarcode').value = decodedText;
@@ -832,12 +810,12 @@
                             stopScanning(section);
                             showToast('❌ कैमरा एक्सेस नहीं मिल सका', 'error');
                         });
-                    });
-                }
-            }).catch(err => {
-                console.log('Error getting cameras:', err);
-                showToast('❌ कैमरा एक्सेस नहीं मिल सका', 'error');
-                stopScanning(section);
+                    }
+                }).catch(err2 => {
+                    console.log('Camera enumeration failed:', err2);
+                    stopScanning(section);
+                    showToast('❌ कैमरा एक्सेस नहीं मिल सका', 'error');
+                });
             });
         }
 
@@ -1648,5 +1626,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f975d049f3a27',t:'MTc1NTgzNjU2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972fac8077034bfb',t:'MTc1NTgzNzQzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
