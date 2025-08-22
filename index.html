@@ -15,53 +15,71 @@
         
         /* Theme Variables */
         :root {
-            --primary-color: #3B82F6;
-            --secondary-color: #10B981;
-            --accent-color: #8B5CF6;
-            --bg-gradient-start: #EFF6FF;
-            --bg-gradient-end: #F0F9FF;
-            --card-bg: #FFFFFF;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
+            --primary: #3B82F6;
+            --secondary: #10B981;
+            --accent: #8B5CF6;
+            --bg-start: #EFF6FF;
+            --bg-end: #F0F9FF;
+            --card: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
         }
         
         /* Theme Classes */
-        .theme-blue { --primary-color: #3B82F6; --secondary-color: #10B981; --accent-color: #8B5CF6; --bg-gradient-start: #EFF6FF; --bg-gradient-end: #F0F9FF; }
-        .theme-green { --primary-color: #10B981; --secondary-color: #059669; --accent-color: #34D399; --bg-gradient-start: #ECFDF5; --bg-gradient-end: #F0FDF4; }
-        .theme-purple { --primary-color: #8B5CF6; --secondary-color: #7C3AED; --accent-color: #A78BFA; --bg-gradient-start: #F5F3FF; --bg-gradient-end: #FAF5FF; }
-        .theme-pink { --primary-color: #EC4899; --secondary-color: #DB2777; --accent-color: #F472B6; --bg-gradient-start: #FDF2F8; --bg-gradient-end: #FEF7F0; }
-        .theme-orange { --primary-color: #F97316; --secondary-color: #EA580C; --accent-color: #FB923C; --bg-gradient-start: #FFF7ED; --bg-gradient-end: #FFFBEB; }
-        .theme-red { --primary-color: #EF4444; --secondary-color: #DC2626; --accent-color: #F87171; --bg-gradient-start: #FEF2F2; --bg-gradient-end: #FFF5F5; }
-        .theme-indigo { --primary-color: #6366F1; --secondary-color: #4F46E5; --accent-color: #818CF8; --bg-gradient-start: #EEF2FF; --bg-gradient-end: #F0F9FF; }
-        .theme-teal { --primary-color: #14B8A6; --secondary-color: #0D9488; --accent-color: #5EEAD4; --bg-gradient-start: #F0FDFA; --bg-gradient-end: #CCFBF1; }
-        .theme-yellow { --primary-color: #F59E0B; --secondary-color: #D97706; --accent-color: #FCD34D; --bg-gradient-start: #FFFBEB; --bg-gradient-end: #FEF3C7; }
-        .theme-gray { --primary-color: #6B7280; --secondary-color: #4B5563; --accent-color: #9CA3AF; --bg-gradient-start: #F9FAFB; --bg-gradient-end: #F3F4F6; }
-        .theme-cyan { --primary-color: #06B6D4; --secondary-color: #0891B2; --accent-color: #67E8F9; --bg-gradient-start: #ECFEFF; --bg-gradient-end: #CFFAFE; }
-        .theme-dark { --primary-color: #374151; --secondary-color: #1F2937; --accent-color: #6B7280; --bg-gradient-start: #111827; --bg-gradient-end: #1F2937; --card-bg: #374151; --text-primary: #F9FAFB; --text-secondary: #D1D5DB; }
+        .theme-blue { --primary: #3B82F6; --secondary: #10B981; --accent: #8B5CF6; --bg-start: #EFF6FF; --bg-end: #F0F9FF; }
+        .theme-green { --primary: #10B981; --secondary: #059669; --accent: #34D399; --bg-start: #ECFDF5; --bg-end: #F0FDF4; }
+        .theme-purple { --primary: #8B5CF6; --secondary: #7C3AED; --accent: #A78BFA; --bg-start: #F5F3FF; --bg-end: #FAF5FF; }
+        .theme-pink { --primary: #EC4899; --secondary: #DB2777; --accent: #F472B6; --bg-start: #FDF2F8; --bg-end: #FEF7F0; }
+        .theme-orange { --primary: #F97316; --secondary: #EA580C; --accent: #FB923C; --bg-start: #FFF7ED; --bg-end: #FFFBEB; }
+        .theme-red { --primary: #EF4444; --secondary: #DC2626; --accent: #F87171; --bg-start: #FEF2F2; --bg-end: #FFF5F5; }
+        .theme-indigo { --primary: #6366F1; --secondary: #4F46E5; --accent: #818CF8; --bg-start: #EEF2FF; --bg-end: #F0F9FF; }
+        .theme-teal { --primary: #14B8A6; --secondary: #0D9488; --accent: #5EEAD4; --bg-start: #F0FDFA; --bg-end: #CCFBF1; }
+        .theme-yellow { --primary: #F59E0B; --secondary: #D97706; --accent: #FCD34D; --bg-start: #FFFBEB; --bg-end: #FEF3C7; }
+        .theme-gray { --primary: #6B7280; --secondary: #4B5563; --accent: #9CA3AF; --bg-start: #F9FAFB; --bg-end: #F3F4F6; }
+        .theme-cyan { --primary: #06B6D4; --secondary: #0891B2; --accent: #67E8F9; --bg-start: #ECFEFF; --bg-end: #CFFAFE; }
+        .theme-dark { --primary: #374151; --secondary: #1F2937; --accent: #6B7280; --bg-start: #111827; --bg-end: #1F2937; --card: #374151; --text: #F9FAFB; --text-light: #D1D5DB; }
+        
+        /* Apply theme colors */
+        body {
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text);
+        }
+        
+        .primary-bg { background-color: var(--primary) !important; }
+        .secondary-bg { background-color: var(--secondary) !important; }
+        .accent-bg { background-color: var(--accent) !important; }
+        .card-bg { background-color: var(--card) !important; }
+        .primary-text { color: var(--primary) !important; }
+        .secondary-text { color: var(--secondary) !important; }
+        .text-main { color: var(--text) !important; }
+        .text-light { color: var(--text-light) !important; }
+        
+        .primary-gradient { background: linear-gradient(135deg, var(--primary), var(--secondary)) !important; }
+        .accent-gradient { background: linear-gradient(135deg, var(--accent), var(--primary)) !important; }
         
         .scanner-container {
             width: 100%;
-            max-width: 320px;
+            max-width: 300px;
             margin: 0 auto;
-            border: 3px solid #10B981;
-            border-radius: 20px;
+            border: 2px solid var(--secondary);
+            border-radius: 16px;
             overflow: hidden;
             background: #000;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             position: relative;
         }
         
         #reader, #storeReader, #shoppingReader {
             width: 100% !important;
-            border-radius: 16px;
-            min-height: 280px;
+            border-radius: 14px;
+            min-height: 250px;
         }
         
         #reader video, #storeReader video, #shoppingReader video {
-            border-radius: 16px !important;
+            border-radius: 14px !important;
             object-fit: cover !important;
             width: 100% !important;
-            height: 280px !important;
+            height: 250px !important;
         }
         
         .scanner-overlay {
@@ -80,35 +98,62 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 180px;
-            height: 180px;
-            border: 3px solid #10B981;
-            border-radius: 16px;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+            width: 160px;
+            height: 160px;
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0%, 100% { border-color: #10B981; }
-            50% { border-color: #34D399; }
+            0%, 100% { border-color: var(--secondary); }
+            50% { border-color: var(--accent); }
+        }
+        
+        .flashlight-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 20;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .flashlight-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .flashlight-btn.active {
+            background: var(--secondary);
         }
         
         .modern-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid #e2e8f0;
+            background: var(--card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
         
         .modern-input {
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             transition: all 0.3s ease;
-            background: #ffffff;
+            background: var(--card);
+            color: var(--text);
         }
         
         .modern-input:focus {
-            border-color: #3B82F6;
+            border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             outline: none;
         }
@@ -118,11 +163,48 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: none;
         }
         
         .modern-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .compact-product {
+            background: var(--card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .compact-product:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .add-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 40;
+        }
+        
+        .add-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
         
         .fade-in {
@@ -158,40 +240,40 @@
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
     <!-- Header -->
-    <div class="glass-effect sticky top-0 z-50 border-b">
-        <div class="px-4 py-4">
+    <div class="card-bg sticky top-0 z-50 border-b shadow-sm">
+        <div class="px-4 py-3">
             <div class="flex items-center justify-between">
-                <h1 id="storeName" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">मेरा स्टोर</h1>
+                <h1 id="storeName" class="text-xl font-bold primary-text">मेरा स्टोर</h1>
                 <div class="relative">
-                    <button onclick="toggleMenu()" class="p-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl modern-btn">
+                    <button onclick="toggleMenu()" class="p-2 primary-gradient text-white rounded-lg modern-btn">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
                     
                     <!-- Menu Dropdown -->
-                    <div id="menuDropdown" class="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border hidden z-50">
+                    <div id="menuDropdown" class="absolute right-0 top-full mt-2 w-56 card-bg rounded-xl shadow-xl border hidden z-50">
                         <div class="p-2">
-                            <button onclick="editStoreName()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
-                                <span class="text-xl">🏪</span>
-                                <span>स्टोर का नाम बदलें</span>
+                            <button onclick="editStoreName()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center space-x-2 text-sm">
+                                <span class="text-lg">🏪</span>
+                                <span class="text-main">स्टोर का नाम बदलें</span>
                             </button>
-                            <button onclick="showThemeSelector()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
-                                <span class="text-xl">🎨</span>
-                                <span>थीम बदलें</span>
+                            <button onclick="showThemeSelector()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center space-x-2 text-sm">
+                                <span class="text-lg">🎨</span>
+                                <span class="text-main">थीम बदलें</span>
                             </button>
-                            <button onclick="showNotesModal()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
-                                <span class="text-xl">📝</span>
-                                <span>नोट्स</span>
+                            <button onclick="showNotesModal()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center space-x-2 text-sm">
+                                <span class="text-lg">📝</span>
+                                <span class="text-main">नोट्स</span>
                             </button>
                             <hr class="my-2">
-                            <button onclick="exportData()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
-                                <span class="text-xl">📤</span>
-                                <span>डेटा एक्सपोर्ट करें</span>
+                            <button onclick="exportData()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center space-x-2 text-sm">
+                                <span class="text-lg">📤</span>
+                                <span class="text-main">डेटा एक्सपोर्ट करें</span>
                             </button>
-                            <button onclick="document.getElementById('importFile').click()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
-                                <span class="text-xl">📥</span>
-                                <span>डेटा इम्पोर्ट करें</span>
+                            <button onclick="document.getElementById('importFile').click()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center space-x-2 text-sm">
+                                <span class="text-lg">📥</span>
+                                <span class="text-main">डेटा इम्पोर्ट करें</span>
                             </button>
                         </div>
                     </div>
@@ -203,115 +285,130 @@
     <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
 
     <!-- Navigation -->
-    <div class="bg-white border-b shadow-sm">
+    <div class="card-bg border-b shadow-sm">
         <div class="flex">
-            <button onclick="showSection('store')" id="storeTab" class="flex-1 py-4 px-4 text-center font-semibold text-blue-600 border-b-3 border-blue-600 bg-blue-50">
+            <button onclick="showSection('store')" id="storeTab" class="flex-1 py-3 px-3 text-center font-semibold primary-text border-b-2 primary-bg text-white">
                 🏪 स्टोर
             </button>
-            <button onclick="showSection('shopping')" id="shoppingTab" class="flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+            <button onclick="showSection('shopping')" id="shoppingTab" class="flex-1 py-3 px-3 text-center font-semibold text-light hover:bg-gray-50">
                 🛒 शॉपिंग
             </button>
-            <button onclick="showSection('history')" id="historyTab" class="flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+            <button onclick="showSection('history')" id="historyTab" class="flex-1 py-3 px-3 text-center font-semibold text-light hover:bg-gray-50">
                 📋 हिस्ट्री
             </button>
         </div>
     </div>
 
     <!-- Store Section -->
-    <div id="storeSection" class="p-4 space-y-4">
-        <div class="modern-card p-6">
-            <h2 class="text-xl font-bold mb-4 text-gray-800">✨ नया प्रोडक्ट जोड़ें</h2>
-            
-            <div class="mb-6">
-                <button onclick="startScanning('store')" id="storeScanBtn" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mb-3">
-                    📱 बारकोड स्कैन करें
-                </button>
-                <div id="storeScanner" class="scanner-container hidden mb-4">
-                    <div id="storeReader" class="relative">
-                        <div class="scanner-overlay"></div>
+    <div id="storeSection" class="p-3 pb-20">
+        <!-- Add Product Modal -->
+        <div id="addProductModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="modern-card p-4 w-full max-w-md slide-up">
+                <h3 class="text-lg font-bold mb-3 text-main">✨ नया प्रोडक्ट जोड़ें</h3>
+                
+                <div class="mb-4">
+                    <button onclick="startScanning('store')" id="storeScanBtn" class="w-full primary-gradient text-white py-2 px-3 rounded-lg font-semibold modern-btn mb-2 text-sm">
+                        📱 बारकोड स्कैन करें
+                    </button>
+                    <div id="storeScanner" class="scanner-container hidden mb-3">
+                        <div id="storeReader" class="relative">
+                            <div class="scanner-overlay"></div>
+                            <button onclick="toggleFlashlight('store')" id="storeFlashBtn" class="flashlight-btn">💡</button>
+                        </div>
+                        <button onclick="stopScanning('store')" class="w-full bg-red-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn mt-2 text-sm">
+                            ❌ स्कैन बंद करें
+                        </button>
                     </div>
-                    <button onclick="stopScanning('store')" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mt-3">
-                        ❌ स्कैन बंद करें
+                </div>
+
+                <div class="space-y-3">
+                    <input type="text" id="productBarcode" placeholder="🔢 बारकोड" class="w-full p-3 modern-input text-sm" onchange="fetchProductDetails(this.value)">
+                    <input type="text" id="productName" placeholder="📦 प्रोडक्ट का नाम" class="w-full p-3 modern-input text-sm" required>
+                    <input type="number" id="productPrice" placeholder="💰 कीमत (₹)" class="w-full p-3 modern-input text-sm" required>
+                    <textarea id="productDetails" placeholder="📝 विवरण" class="w-full p-3 modern-input h-16 resize-none text-sm"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                    <button onclick="addProduct()" class="secondary-bg text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
+                        ➕ जोड़ें
+                    </button>
+                    <button onclick="closeAddModal()" class="bg-gray-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
+                        ❌ बंद करें
                     </button>
                 </div>
             </div>
-
-            <div class="space-y-4">
-                <input type="text" id="productBarcode" placeholder="🔢 बारकोड (मैन्युअल)" class="w-full p-4 modern-input" onchange="fetchProductDetails(this.value)">
-                <input type="text" id="productName" placeholder="📦 प्रोडक्ट का नाम" class="w-full p-4 modern-input" required>
-                <input type="number" id="productPrice" placeholder="💰 कीमत (₹)" class="w-full p-4 modern-input" required>
-                <textarea id="productDetails" placeholder="📝 विवरण" class="w-full p-4 modern-input h-24 resize-none"></textarea>
-                <button onclick="addProduct()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-4 rounded-xl font-bold text-lg modern-btn">
-                    ➕ प्रोडक्ट जोड़ें
-                </button>
-            </div>
         </div>
 
-        <div class="modern-card p-6">
-            <h2 class="text-xl font-bold mb-4 text-gray-800">📦 सभी प्रोडक्ट्स</h2>
-            <div id="productsList" class="space-y-3">
+        <!-- Products List -->
+        <div class="modern-card p-4">
+            <h2 class="text-lg font-bold mb-3 text-main">📦 सभी प्रोडक्ट्स</h2>
+            <div id="productsList" class="space-y-2">
                 <!-- Products will be displayed here -->
             </div>
         </div>
+
+        <!-- Floating Add Button -->
+        <button onclick="showAddModal()" class="add-btn">+</button>
     </div>
 
     <!-- Shopping Section -->
-    <div id="shoppingSection" class="p-4 space-y-4 hidden">
-        <div class="modern-card p-6">
-            <h2 class="text-xl font-bold mb-4 text-gray-800">🧾 बिलिंग</h2>
-            
-            <div class="mb-6">
-                <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mb-3">
-                    📱 प्रोडक्ट स्कैन करें
-                </button>
-                <div id="shoppingScanner" class="scanner-container hidden mb-4">
-                    <div id="shoppingReader" class="relative">
-                        <div class="scanner-overlay"></div>
-                    </div>
-                    <button onclick="stopScanning('shopping')" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mt-3">
-                        ❌ स्कैन बंद करें
-                    </button>
-                </div>
-            </div>
-
-            <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम (वैकल्पिक)" class="w-full p-4 modern-input mb-4">
-            <input type="text" id="searchProduct" placeholder="🔍 प्रोडक्ट खोजें या बारकोड डालें" class="w-full p-4 modern-input mb-4" onkeyup="searchProducts(this.value)">
-            
-            <div id="searchResults" class="hidden mb-4 space-y-2">
-                <!-- Search results will appear here -->
-            </div>
+    <div id="shoppingSection" class="p-3 pb-20 hidden">
+        <!-- Top Action Buttons -->
+        <div class="grid grid-cols-3 gap-2 mb-3">
+            <button onclick="saveBill()" class="secondary-bg text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
+                💾 सेव
+            </button>
+            <button onclick="printBill()" class="primary-bg text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
+                🖨️ प्रिंट
+            </button>
+            <button onclick="clearBill()" class="bg-red-500 text-white py-2 px-2 rounded-lg font-semibold modern-btn text-sm">
+                🗑️ क्लियर
+            </button>
         </div>
 
-        <div class="modern-card p-6">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">🛍️ बिल आइटम्स</h3>
-            <div id="billItems" class="space-y-3 mb-6">
+        <!-- Bill Section -->
+        <div class="modern-card p-4 mb-3">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-main">🛍️ बिल</h3>
+                <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="primary-gradient text-white py-1 px-3 rounded-lg font-semibold modern-btn text-sm">
+                    + स्कैन
+                </button>
+            </div>
+            
+            <div id="shoppingScanner" class="scanner-container hidden mb-3">
+                <div id="shoppingReader" class="relative">
+                    <div class="scanner-overlay"></div>
+                    <button onclick="toggleFlashlight('shopping')" id="shoppingFlashBtn" class="flashlight-btn">💡</button>
+                </div>
+                <button onclick="stopScanning('shopping')" class="w-full bg-red-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn mt-2 text-sm">
+                    ❌ स्कैन बंद करें
+                </button>
+            </div>
+
+            <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम (वैकल्पिक)" class="w-full p-3 modern-input mb-3 text-sm">
+            <input type="text" id="searchProduct" placeholder="🔍 प्रोडक्ट खोजें" class="w-full p-3 modern-input mb-3 text-sm" onkeyup="searchProducts(this.value)">
+            
+            <div id="searchResults" class="hidden mb-3 space-y-2">
+                <!-- Search results will appear here -->
+            </div>
+
+            <div id="billItems" class="space-y-2 mb-4">
                 <!-- Bill items will be displayed here -->
             </div>
-            <div class="border-t-2 border-gray-200 pt-4">
-                <div class="flex justify-between items-center text-2xl font-bold text-green-600">
+            
+            <div class="border-t pt-3">
+                <div class="flex justify-between items-center text-xl font-bold secondary-text">
                     <span>कुल राशि:</span>
                     <span id="totalAmount">₹0</span>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-3 mt-6">
-                <button onclick="saveBill()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
-                    💾 सेव करें
-                </button>
-                <button onclick="printBill()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
-                    🖨️ प्रिंट करें
-                </button>
-            </div>
-            <button onclick="clearBill()" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mt-3">
-                🗑️ बिल क्लियर करें
-            </button>
         </div>
     </div>
 
     <!-- History Section -->
-    <div id="historySection" class="p-4 hidden">
-        <div class="modern-card p-6">
-            <h2 class="text-xl font-bold mb-4 text-gray-800">📋 बिल हिस्ट्री</h2>
-            <div id="billHistory" class="space-y-4">
+    <div id="historySection" class="p-3 hidden">
+        <div class="modern-card p-4">
+            <h2 class="text-lg font-bold mb-3 text-main">📋 बिल हिस्ट्री</h2>
+            <div id="billHistory" class="space-y-3">
                 <!-- Bill history will be displayed here -->
             </div>
         </div>
@@ -324,18 +421,18 @@
 
     <!-- Edit Product Modal -->
     <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="modern-card p-6 w-full max-w-md slide-up">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">✏️ प्रोडक्ट एडिट करें</h3>
-            <div class="space-y-4">
-                <input type="text" id="editProductName" placeholder="📦 प्रोडक्ट का नाम" class="w-full p-4 modern-input">
-                <input type="number" id="editProductPrice" placeholder="💰 कीमत (₹)" class="w-full p-4 modern-input">
-                <textarea id="editProductDetails" placeholder="📝 विवरण" class="w-full p-4 modern-input h-24 resize-none"></textarea>
+        <div class="modern-card p-4 w-full max-w-md slide-up">
+            <h3 class="text-lg font-bold mb-3 text-main">✏️ प्रोडक्ट एडिट करें</h3>
+            <div class="space-y-3">
+                <input type="text" id="editProductName" placeholder="📦 प्रोडक्ट का नाम" class="w-full p-3 modern-input text-sm">
+                <input type="number" id="editProductPrice" placeholder="💰 कीमत (₹)" class="w-full p-3 modern-input text-sm">
+                <textarea id="editProductDetails" placeholder="📝 विवरण" class="w-full p-3 modern-input h-16 resize-none text-sm"></textarea>
             </div>
-            <div class="grid grid-cols-2 gap-3 mt-6">
-                <button onclick="updateProduct()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
-                    ✅ अपडेट करें
+            <div class="grid grid-cols-2 gap-2 mt-4">
+                <button onclick="updateProduct()" class="secondary-bg text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
+                    ✅ अपडेट
                 </button>
-                <button onclick="closeEditModal()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                <button onclick="closeEditModal()" class="bg-gray-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
                     ❌ कैंसल
                 </button>
             </div>
@@ -344,59 +441,59 @@
 
     <!-- Theme Selector Modal -->
     <div id="themeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="modern-card p-6 w-full max-w-lg slide-up">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">🎨 थीम चुनें</h3>
-            <div class="grid grid-cols-3 gap-3 mb-6">
-                <button onclick="changeTheme('blue')" class="p-4 rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:border-blue-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">नीला</span>
+        <div class="modern-card p-4 w-full max-w-lg slide-up">
+            <h3 class="text-lg font-bold mb-3 text-main">🎨 थीम चुनें</h3>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <button onclick="changeTheme('blue')" class="p-3 rounded-lg border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:border-blue-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-blue-500 to-indigo-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">नीला</span>
                 </button>
-                <button onclick="changeTheme('green')" class="p-4 rounded-xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:border-green-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">हरा</span>
+                <button onclick="changeTheme('green')" class="p-3 rounded-lg border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:border-green-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">हरा</span>
                 </button>
-                <button onclick="changeTheme('purple')" class="p-4 rounded-xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 hover:border-purple-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-purple-500 to-violet-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">बैंगनी</span>
+                <button onclick="changeTheme('purple')" class="p-3 rounded-lg border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 hover:border-purple-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-purple-500 to-violet-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">बैंगनी</span>
                 </button>
-                <button onclick="changeTheme('pink')" class="p-4 rounded-xl border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-pink-100 hover:border-pink-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-pink-500 to-rose-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">गुलाबी</span>
+                <button onclick="changeTheme('pink')" class="p-3 rounded-lg border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-pink-100 hover:border-pink-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-pink-500 to-rose-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">गुलाबी</span>
                 </button>
-                <button onclick="changeTheme('orange')" class="p-4 rounded-xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:border-orange-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">नारंगी</span>
+                <button onclick="changeTheme('orange')" class="p-3 rounded-lg border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:border-orange-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">नारंगी</span>
                 </button>
-                <button onclick="changeTheme('red')" class="p-4 rounded-xl border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:border-red-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">लाल</span>
+                <button onclick="changeTheme('red')" class="p-3 rounded-lg border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:border-red-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-red-500 to-pink-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">लाल</span>
                 </button>
-                <button onclick="changeTheme('indigo')" class="p-4 rounded-xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:border-indigo-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-indigo-500 to-blue-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">इंडिगो</span>
+                <button onclick="changeTheme('indigo')" class="p-3 rounded-lg border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:border-indigo-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-indigo-500 to-blue-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">इंडिगो</span>
                 </button>
-                <button onclick="changeTheme('teal')" class="p-4 rounded-xl border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100 hover:border-teal-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-teal-500 to-cyan-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">टील</span>
+                <button onclick="changeTheme('teal')" class="p-3 rounded-lg border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100 hover:border-teal-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">टील</span>
                 </button>
-                <button onclick="changeTheme('yellow')" class="p-4 rounded-xl border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-yellow-100 hover:border-yellow-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">पीला</span>
+                <button onclick="changeTheme('yellow')" class="p-3 rounded-lg border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-yellow-100 hover:border-yellow-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-yellow-500 to-orange-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">पीला</span>
                 </button>
-                <button onclick="changeTheme('gray')" class="p-4 rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:border-gray-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-gray-500 to-slate-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">स्लेट</span>
+                <button onclick="changeTheme('gray')" class="p-3 rounded-lg border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:border-gray-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-gray-500 to-slate-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">स्लेट</span>
                 </button>
-                <button onclick="changeTheme('cyan')" class="p-4 rounded-xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 hover:border-cyan-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded mb-2"></div>
-                    <span class="text-sm font-medium">सियान</span>
+                <button onclick="changeTheme('cyan')" class="p-3 rounded-lg border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 hover:border-cyan-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-cyan-500 to-blue-500 rounded mb-1"></div>
+                    <span class="text-xs font-medium">सियान</span>
                 </button>
-                <button onclick="changeTheme('dark')" class="p-4 rounded-xl border-2 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-400 transition-all">
-                    <div class="w-full h-8 bg-gradient-to-r from-gray-700 to-gray-900 rounded mb-2"></div>
-                    <span class="text-sm font-medium text-white">डार्क</span>
+                <button onclick="changeTheme('dark')" class="p-3 rounded-lg border-2 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-400 transition-all">
+                    <div class="w-full h-6 bg-gradient-to-r from-gray-700 to-gray-900 rounded mb-1"></div>
+                    <span class="text-xs font-medium text-white">डार्क</span>
                 </button>
             </div>
-            <button onclick="closeThemeModal()" class="w-full bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+            <button onclick="closeThemeModal()" class="w-full bg-gray-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
                 ❌ बंद करें
             </button>
         </div>
@@ -404,14 +501,14 @@
 
     <!-- Notes Modal -->
     <div id="notesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="modern-card p-6 w-full max-w-md slide-up">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">📝 नोट्स</h3>
-            <textarea id="notesText" placeholder="यहाँ अपने नोट्स लिखें..." class="w-full p-4 modern-input h-40 resize-none mb-4"></textarea>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="saveNotes()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+        <div class="modern-card p-4 w-full max-w-md slide-up">
+            <h3 class="text-lg font-bold mb-3 text-main">📝 नोट्स</h3>
+            <textarea id="notesText" placeholder="यहाँ अपने नोट्स लिखें..." class="w-full p-3 modern-input h-32 resize-none mb-3 text-sm"></textarea>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="saveNotes()" class="secondary-bg text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
                     💾 सेव करें
                 </button>
-                <button onclick="closeNotesModal()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                <button onclick="closeNotesModal()" class="bg-gray-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
                     ❌ बंद करें
                 </button>
             </div>
@@ -445,7 +542,7 @@
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('storeName').textContent = storeName;
-            document.body.className = `${document.body.className.split(' ')[0]} theme-${currentTheme}`;
+            applyTheme(currentTheme);
             displayProducts();
             displayBillHistory();
             autoSave();
@@ -457,6 +554,54 @@
                 }
             });
         });
+
+        // Apply theme function
+        function applyTheme(theme) {
+            document.body.className = `min-h-screen theme-${theme}`;
+            currentTheme = theme;
+        }
+
+        // Show/hide add product modal
+        function showAddModal() {
+            document.getElementById('addProductModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addProductModal').classList.add('hidden');
+            // Clear form
+            document.getElementById('productBarcode').value = '';
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productDetails').value = '';
+        }
+
+        // Flashlight toggle
+        let flashlightEnabled = false;
+        let currentStream = null;
+
+        function toggleFlashlight(section) {
+            const flashBtn = document.getElementById(section + 'FlashBtn');
+            
+            if (currentStream && currentStream.getVideoTracks().length > 0) {
+                const track = currentStream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                
+                if (capabilities.torch) {
+                    flashlightEnabled = !flashlightEnabled;
+                    track.applyConstraints({
+                        advanced: [{ torch: flashlightEnabled }]
+                    }).then(() => {
+                        flashBtn.classList.toggle('active', flashlightEnabled);
+                        flashBtn.textContent = flashlightEnabled ? '🔦' : '💡';
+                    }).catch(err => {
+                        console.log('Torch not supported:', err);
+                        showToast('❌ फ्लैशलाइट सपोर्ट नहीं है', 'error');
+                    });
+                } else {
+                    showToast('❌ फ्लैशलाइट सपोर्ट नहीं है', 'error');
+                }
+            }
+        }
 
         // Auto-save functionality
         function autoSave() {
@@ -485,8 +630,7 @@
         }
 
         function changeTheme(theme) {
-            currentTheme = theme;
-            document.body.className = `bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen theme-${theme}`;
+            applyTheme(theme);
             localStorage.setItem('currentTheme', theme);
             closeThemeModal();
             showToast('🎨 थीम बदल गई!', 'success');
@@ -590,12 +734,12 @@
             if (isScanning) return;
             
             const scannerDiv = document.getElementById(section + 'Scanner');
-            const readerDiv = document.getElementById(section + 'Reader');
             const scanBtn = document.getElementById(section + 'ScanBtn');
             
             scannerDiv.classList.remove('hidden');
             scanBtn.disabled = true;
             isScanning = true;
+            flashlightEnabled = false;
             
             html5QrCode = new Html5Qrcode(section + 'Reader');
             
@@ -614,27 +758,27 @@
                     if (backCamera) {
                         cameraId = backCamera.id;
                     } else if (devices.length > 1) {
-                        // If multiple cameras, usually the last one is back camera
                         cameraId = devices[devices.length - 1].id;
                     }
                     
+                    const config = {
+                        fps: 20,
+                        qrbox: { width: 180, height: 180 },
+                        aspectRatio: 1.0,
+                        disableFlip: false,
+                        videoConstraints: {
+                            facingMode: "environment",
+                            focusMode: "continuous",
+                            advanced: [
+                                { focusMode: "continuous" },
+                                { focusDistance: { min: 0.1, max: 10 } }
+                            ]
+                        }
+                    };
+                    
                     html5QrCode.start(
                         cameraId,
-                        {
-                            fps: 15,
-                            qrbox: { width: 200, height: 200 },
-                            aspectRatio: 1.0,
-                            disableFlip: false,
-                            videoConstraints: {
-                                facingMode: "environment",
-                                focusMode: "continuous",
-                                advanced: [
-                                    { focusMode: "continuous" },
-                                    { focusDistance: { min: 0.1, max: 10 } },
-                                    { zoom: { min: 1, max: 3 } }
-                                ]
-                            }
-                        },
+                        config,
                         (decodedText, decodedResult) => {
                             if (section === 'store') {
                                 document.getElementById('productBarcode').value = decodedText;
@@ -648,15 +792,18 @@
                         (errorMessage) => {
                             // Handle scan error silently
                         }
-                    ).catch(err => {
+                    ).then(() => {
+                        // Store current stream for flashlight
+                        const video = document.querySelector(`#${section}Reader video`);
+                        if (video && video.srcObject) {
+                            currentStream = video.srcObject;
+                        }
+                    }).catch(err => {
                         console.log('Error starting scanner:', err);
-                        // Try with basic constraints if advanced fails
+                        // Fallback with basic constraints
                         html5QrCode.start(
                             { facingMode: "environment" },
-                            {
-                                fps: 10,
-                                qrbox: { width: 200, height: 200 }
-                            },
+                            { fps: 15, qrbox: { width: 180, height: 180 } },
                             (decodedText, decodedResult) => {
                                 if (section === 'store') {
                                     document.getElementById('productBarcode').value = decodedText;
@@ -667,11 +814,9 @@
                                 }
                                 stopScanning(section);
                             },
-                            (errorMessage) => {
-                                // Handle scan error silently
-                            }
+                            (errorMessage) => {}
                         ).catch(err2 => {
-                            console.log('Fallback scanner also failed:', err2);
+                            console.log('Fallback scanner failed:', err2);
                             stopScanning(section);
                             showToast('❌ कैमरा एक्सेस नहीं मिल सका', 'error');
                         });
@@ -695,10 +840,18 @@
             
             const scannerDiv = document.getElementById(section + 'Scanner');
             const scanBtn = document.getElementById(section + 'ScanBtn');
+            const flashBtn = document.getElementById(section + 'FlashBtn');
             
             scannerDiv.classList.add('hidden');
             scanBtn.disabled = false;
             isScanning = false;
+            flashlightEnabled = false;
+            currentStream = null;
+            
+            if (flashBtn) {
+                flashBtn.classList.remove('active');
+                flashBtn.textContent = '💡';
+            }
         }
 
         // Product management
@@ -724,12 +877,7 @@
                 dateAdded: new Date().toLocaleString('hi-IN')
             };
 
-            // Clear form
-            document.getElementById('productBarcode').value = '';
-            document.getElementById('productName').value = '';
-            document.getElementById('productPrice').value = '';
-            document.getElementById('productDetails').value = '';
-
+            closeAddModal();
             displayProducts();
             showToast('✅ प्रोडक्ट सफलतापूर्वक जोड़ा गया!', 'success');
         }
@@ -1270,5 +1418,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f5794a317b7e5',t:'MTc1NTgzMzk2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f76dd54901432',t:'MTc1NTgzNTIzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
