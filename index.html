@@ -7,43 +7,135 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         body {
-            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
         }
+        
+        /* Theme Variables */
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #8B5CF6;
+            --bg-gradient-start: #EFF6FF;
+            --bg-gradient-end: #F0F9FF;
+            --card-bg: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+        }
+        
+        /* Theme Classes */
+        .theme-blue { --primary-color: #3B82F6; --secondary-color: #10B981; --accent-color: #8B5CF6; --bg-gradient-start: #EFF6FF; --bg-gradient-end: #F0F9FF; }
+        .theme-green { --primary-color: #10B981; --secondary-color: #059669; --accent-color: #34D399; --bg-gradient-start: #ECFDF5; --bg-gradient-end: #F0FDF4; }
+        .theme-purple { --primary-color: #8B5CF6; --secondary-color: #7C3AED; --accent-color: #A78BFA; --bg-gradient-start: #F5F3FF; --bg-gradient-end: #FAF5FF; }
+        .theme-pink { --primary-color: #EC4899; --secondary-color: #DB2777; --accent-color: #F472B6; --bg-gradient-start: #FDF2F8; --bg-gradient-end: #FEF7F0; }
+        .theme-orange { --primary-color: #F97316; --secondary-color: #EA580C; --accent-color: #FB923C; --bg-gradient-start: #FFF7ED; --bg-gradient-end: #FFFBEB; }
+        .theme-red { --primary-color: #EF4444; --secondary-color: #DC2626; --accent-color: #F87171; --bg-gradient-start: #FEF2F2; --bg-gradient-end: #FFF5F5; }
+        .theme-indigo { --primary-color: #6366F1; --secondary-color: #4F46E5; --accent-color: #818CF8; --bg-gradient-start: #EEF2FF; --bg-gradient-end: #F0F9FF; }
+        .theme-teal { --primary-color: #14B8A6; --secondary-color: #0D9488; --accent-color: #5EEAD4; --bg-gradient-start: #F0FDFA; --bg-gradient-end: #CCFBF1; }
+        .theme-yellow { --primary-color: #F59E0B; --secondary-color: #D97706; --accent-color: #FCD34D; --bg-gradient-start: #FFFBEB; --bg-gradient-end: #FEF3C7; }
+        .theme-gray { --primary-color: #6B7280; --secondary-color: #4B5563; --accent-color: #9CA3AF; --bg-gradient-start: #F9FAFB; --bg-gradient-end: #F3F4F6; }
+        .theme-cyan { --primary-color: #06B6D4; --secondary-color: #0891B2; --accent-color: #67E8F9; --bg-gradient-start: #ECFEFF; --bg-gradient-end: #CFFAFE; }
+        .theme-dark { --primary-color: #374151; --secondary-color: #1F2937; --accent-color: #6B7280; --bg-gradient-start: #111827; --bg-gradient-end: #1F2937; --card-bg: #374151; --text-primary: #F9FAFB; --text-secondary: #D1D5DB; }
         
         .scanner-container {
             width: 100%;
-            max-width: 350px;
+            max-width: 320px;
             margin: 0 auto;
-            border: 2px solid #3B82F6;
-            border-radius: 12px;
+            border: 3px solid #10B981;
+            border-radius: 20px;
             overflow: hidden;
             background: #000;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            position: relative;
         }
         
         #reader, #storeReader, #shoppingReader {
             width: 100% !important;
-            border-radius: 8px;
+            border-radius: 16px;
+            min-height: 280px;
         }
         
         #reader video, #storeReader video, #shoppingReader video {
-            border-radius: 8px !important;
+            border-radius: 16px !important;
             object-fit: cover !important;
+            width: 100% !important;
+            height: 280px !important;
+        }
+        
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .scanner-overlay::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            border: 3px solid #10B981;
+            border-radius: 16px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { border-color: #10B981; }
+            50% { border-color: #34D399; }
+        }
+        
+        .modern-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .modern-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+        }
+        
+        .modern-input:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+        
+        .modern-btn {
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modern-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .fade-in {
-            animation: fadeIn 0.3s ease-in;
+            animation: fadeIn 0.4s ease-out;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         .slide-up {
-            animation: slideUp 0.3s ease-out;
+            animation: slideUp 0.4s ease-out;
         }
         
         @keyframes slideUp {
@@ -56,136 +148,170 @@
             .print-area, .print-area * { visibility: visible; }
             .print-area { position: absolute; left: 0; top: 0; width: 100%; }
         }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
     <!-- Header -->
-    <div class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="px-4 py-3">
+    <div class="glass-effect sticky top-0 z-50 border-b">
+        <div class="px-4 py-4">
             <div class="flex items-center justify-between">
-                <h1 id="storeName" class="text-xl font-bold text-gray-800 cursor-pointer" onclick="editStoreName()">मेरा स्टोर</h1>
-                <div class="flex space-x-2">
-                    <button onclick="exportData()" class="p-2 bg-green-500 text-white rounded-lg">
+                <h1 id="storeName" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">मेरा स्टोर</h1>
+                <div class="relative">
+                    <button onclick="toggleMenu()" class="p-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl modern-btn">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
-                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
-                    <button onclick="document.getElementById('importFile').click()" class="p-2 bg-blue-500 text-white rounded-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
-                        </svg>
-                    </button>
+                    
+                    <!-- Menu Dropdown -->
+                    <div id="menuDropdown" class="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border hidden z-50">
+                        <div class="p-2">
+                            <button onclick="editStoreName()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
+                                <span class="text-xl">🏪</span>
+                                <span>स्टोर का नाम बदलें</span>
+                            </button>
+                            <button onclick="showThemeSelector()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
+                                <span class="text-xl">🎨</span>
+                                <span>थीम बदलें</span>
+                            </button>
+                            <button onclick="showNotesModal()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
+                                <span class="text-xl">📝</span>
+                                <span>नोट्स</span>
+                            </button>
+                            <hr class="my-2">
+                            <button onclick="exportData()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
+                                <span class="text-xl">📤</span>
+                                <span>डेटा एक्सपोर्ट करें</span>
+                            </button>
+                            <button onclick="document.getElementById('importFile').click()" class="w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg flex items-center space-x-3">
+                                <span class="text-xl">📥</span>
+                                <span>डेटा इम्पोर्ट करें</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
 
     <!-- Navigation -->
-    <div class="bg-white border-t">
+    <div class="bg-white border-b shadow-sm">
         <div class="flex">
-            <button onclick="showSection('store')" id="storeTab" class="flex-1 py-3 px-4 text-center font-medium text-blue-600 border-b-2 border-blue-600">
-                स्टोर
+            <button onclick="showSection('store')" id="storeTab" class="flex-1 py-4 px-4 text-center font-semibold text-blue-600 border-b-3 border-blue-600 bg-blue-50">
+                🏪 स्टोर
             </button>
-            <button onclick="showSection('shopping')" id="shoppingTab" class="flex-1 py-3 px-4 text-center font-medium text-gray-500">
-                शॉपिंग
+            <button onclick="showSection('shopping')" id="shoppingTab" class="flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+                🛒 शॉपिंग
             </button>
-            <button onclick="showSection('history')" id="historyTab" class="flex-1 py-3 px-4 text-center font-medium text-gray-500">
-                हिस्ट्री
+            <button onclick="showSection('history')" id="historyTab" class="flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+                📋 हिस्ट्री
             </button>
         </div>
     </div>
 
     <!-- Store Section -->
-    <div id="storeSection" class="p-4">
-        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
-            <h2 class="text-lg font-semibold mb-3">नया प्रोडक्ट जोड़ें</h2>
+    <div id="storeSection" class="p-4 space-y-4">
+        <div class="modern-card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">✨ नया प्रोडक्ट जोड़ें</h2>
             
-            <div class="mb-4">
-                <button onclick="startScanning('store')" id="storeScanBtn" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg mb-2">
-                    बारकोड स्कैन करें
+            <div class="mb-6">
+                <button onclick="startScanning('store')" id="storeScanBtn" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mb-3">
+                    📱 बारकोड स्कैन करें
                 </button>
                 <div id="storeScanner" class="scanner-container hidden mb-4">
-                    <div id="storeReader"></div>
-                    <button onclick="stopScanning('store')" class="w-full bg-red-500 text-white py-2 px-4 rounded-lg mt-2">
-                        स्कैन बंद करें
+                    <div id="storeReader" class="relative">
+                        <div class="scanner-overlay"></div>
+                    </div>
+                    <button onclick="stopScanning('store')" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mt-3">
+                        ❌ स्कैन बंद करें
                     </button>
                 </div>
             </div>
 
-            <div class="space-y-3">
-                <input type="text" id="productBarcode" placeholder="बारकोड (मैन्युअल)" class="w-full p-3 border rounded-lg">
-                <input type="text" id="productName" placeholder="प्रोडक्ट का नाम" class="w-full p-3 border rounded-lg" required>
-                <input type="number" id="productPrice" placeholder="कीमत (₹)" class="w-full p-3 border rounded-lg" required>
-                <textarea id="productDetails" placeholder="विवरण" class="w-full p-3 border rounded-lg h-20"></textarea>
-                <button onclick="addProduct()" class="w-full bg-green-500 text-white py-3 px-4 rounded-lg font-medium">
-                    प्रोडक्ट जोड़ें
+            <div class="space-y-4">
+                <input type="text" id="productBarcode" placeholder="🔢 बारकोड (मैन्युअल)" class="w-full p-4 modern-input" onchange="fetchProductDetails(this.value)">
+                <input type="text" id="productName" placeholder="📦 प्रोडक्ट का नाम" class="w-full p-4 modern-input" required>
+                <input type="number" id="productPrice" placeholder="💰 कीमत (₹)" class="w-full p-4 modern-input" required>
+                <textarea id="productDetails" placeholder="📝 विवरण" class="w-full p-4 modern-input h-24 resize-none"></textarea>
+                <button onclick="addProduct()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-4 rounded-xl font-bold text-lg modern-btn">
+                    ➕ प्रोडक्ट जोड़ें
                 </button>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-4">
-            <h2 class="text-lg font-semibold mb-3">सभी प्रोडक्ट्स</h2>
-            <div id="productsList" class="space-y-2">
+        <div class="modern-card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📦 सभी प्रोडक्ट्स</h2>
+            <div id="productsList" class="space-y-3">
                 <!-- Products will be displayed here -->
             </div>
         </div>
     </div>
 
     <!-- Shopping Section -->
-    <div id="shoppingSection" class="p-4 hidden">
-        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
-            <h2 class="text-lg font-semibold mb-3">बिलिंग</h2>
+    <div id="shoppingSection" class="p-4 space-y-4 hidden">
+        <div class="modern-card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">🧾 बिलिंग</h2>
             
-            <div class="mb-4">
-                <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg mb-2">
-                    प्रोडक्ट स्कैन करें
+            <div class="mb-6">
+                <button onclick="startScanning('shopping')" id="shoppingScanBtn" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mb-3">
+                    📱 प्रोडक्ट स्कैन करें
                 </button>
                 <div id="shoppingScanner" class="scanner-container hidden mb-4">
-                    <div id="shoppingReader"></div>
-                    <button onclick="stopScanning('shopping')" class="w-full bg-red-500 text-white py-2 px-4 rounded-lg mt-2">
-                        स्कैन बंद करें
+                    <div id="shoppingReader" class="relative">
+                        <div class="scanner-overlay"></div>
+                    </div>
+                    <button onclick="stopScanning('shopping')" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mt-3">
+                        ❌ स्कैन बंद करें
                     </button>
                 </div>
             </div>
 
-            <input type="text" id="searchProduct" placeholder="प्रोडक्ट खोजें या बारकोड डालें" class="w-full p-3 border rounded-lg mb-3" onkeyup="searchProducts(this.value)">
+            <input type="text" id="customerName" placeholder="👤 ग्राहक का नाम (वैकल्पिक)" class="w-full p-4 modern-input mb-4">
+            <input type="text" id="searchProduct" placeholder="🔍 प्रोडक्ट खोजें या बारकोड डालें" class="w-full p-4 modern-input mb-4" onkeyup="searchProducts(this.value)">
             
-            <div id="searchResults" class="hidden mb-4">
+            <div id="searchResults" class="hidden mb-4 space-y-2">
                 <!-- Search results will appear here -->
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-4 mb-4">
-            <h3 class="text-lg font-semibold mb-3">बिल आइटम्स</h3>
-            <div id="billItems" class="space-y-2 mb-4">
+        <div class="modern-card p-6">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">🛍️ बिल आइटम्स</h3>
+            <div id="billItems" class="space-y-3 mb-6">
                 <!-- Bill items will be displayed here -->
             </div>
-            <div class="border-t pt-3">
-                <div class="flex justify-between items-center text-xl font-bold">
+            <div class="border-t-2 border-gray-200 pt-4">
+                <div class="flex justify-between items-center text-2xl font-bold text-green-600">
                     <span>कुल राशि:</span>
                     <span id="totalAmount">₹0</span>
                 </div>
             </div>
-            <div class="flex space-x-2 mt-4">
-                <button onclick="saveBill()" class="flex-1 bg-green-500 text-white py-3 px-4 rounded-lg font-medium">
-                    बिल सेव करें
+            <div class="grid grid-cols-2 gap-3 mt-6">
+                <button onclick="saveBill()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                    💾 सेव करें
                 </button>
-                <button onclick="printBill()" class="flex-1 bg-blue-500 text-white py-3 px-4 rounded-lg font-medium">
-                    बिल प्रिंट करें
+                <button onclick="printBill()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                    🖨️ प्रिंट करें
                 </button>
             </div>
-            <button onclick="clearBill()" class="w-full bg-red-500 text-white py-2 px-4 rounded-lg mt-2">
-                बिल क्लियर करें
+            <button onclick="clearBill()" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn mt-3">
+                🗑️ बिल क्लियर करें
             </button>
         </div>
     </div>
 
     <!-- History Section -->
     <div id="historySection" class="p-4 hidden">
-        <div class="bg-white rounded-lg shadow-md p-4">
-            <h2 class="text-lg font-semibold mb-3">बिल हिस्ट्री</h2>
-            <div id="billHistory" class="space-y-3">
+        <div class="modern-card p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📋 बिल हिस्ट्री</h2>
+            <div id="billHistory" class="space-y-4">
                 <!-- Bill history will be displayed here -->
             </div>
         </div>
@@ -197,23 +323,97 @@
     </div>
 
     <!-- Edit Product Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">प्रोडक्ट एडिट करें</h3>
-                <div class="space-y-3">
-                    <input type="text" id="editProductName" placeholder="प्रोडक्ट का नाम" class="w-full p-3 border rounded-lg">
-                    <input type="number" id="editProductPrice" placeholder="कीमत (₹)" class="w-full p-3 border rounded-lg">
-                    <textarea id="editProductDetails" placeholder="विवरण" class="w-full p-3 border rounded-lg h-20"></textarea>
-                </div>
-                <div class="flex space-x-2 mt-4">
-                    <button onclick="updateProduct()" class="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg">
-                        अपडेट करें
-                    </button>
-                    <button onclick="closeEditModal()" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg">
-                        कैंसल
-                    </button>
-                </div>
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="modern-card p-6 w-full max-w-md slide-up">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">✏️ प्रोडक्ट एडिट करें</h3>
+            <div class="space-y-4">
+                <input type="text" id="editProductName" placeholder="📦 प्रोडक्ट का नाम" class="w-full p-4 modern-input">
+                <input type="number" id="editProductPrice" placeholder="💰 कीमत (₹)" class="w-full p-4 modern-input">
+                <textarea id="editProductDetails" placeholder="📝 विवरण" class="w-full p-4 modern-input h-24 resize-none"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-6">
+                <button onclick="updateProduct()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                    ✅ अपडेट करें
+                </button>
+                <button onclick="closeEditModal()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                    ❌ कैंसल
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Selector Modal -->
+    <div id="themeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="modern-card p-6 w-full max-w-lg slide-up">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">🎨 थीम चुनें</h3>
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <button onclick="changeTheme('blue')" class="p-4 rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:border-blue-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">नीला</span>
+                </button>
+                <button onclick="changeTheme('green')" class="p-4 rounded-xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:border-green-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">हरा</span>
+                </button>
+                <button onclick="changeTheme('purple')" class="p-4 rounded-xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 hover:border-purple-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-purple-500 to-violet-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">बैंगनी</span>
+                </button>
+                <button onclick="changeTheme('pink')" class="p-4 rounded-xl border-2 border-pink-200 bg-gradient-to-br from-pink-50 to-pink-100 hover:border-pink-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-pink-500 to-rose-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">गुलाबी</span>
+                </button>
+                <button onclick="changeTheme('orange')" class="p-4 rounded-xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:border-orange-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">नारंगी</span>
+                </button>
+                <button onclick="changeTheme('red')" class="p-4 rounded-xl border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:border-red-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">लाल</span>
+                </button>
+                <button onclick="changeTheme('indigo')" class="p-4 rounded-xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:border-indigo-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-indigo-500 to-blue-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">इंडिगो</span>
+                </button>
+                <button onclick="changeTheme('teal')" class="p-4 rounded-xl border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100 hover:border-teal-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-teal-500 to-cyan-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">टील</span>
+                </button>
+                <button onclick="changeTheme('yellow')" class="p-4 rounded-xl border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-yellow-100 hover:border-yellow-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">पीला</span>
+                </button>
+                <button onclick="changeTheme('gray')" class="p-4 rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:border-gray-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-gray-500 to-slate-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">स्लेट</span>
+                </button>
+                <button onclick="changeTheme('cyan')" class="p-4 rounded-xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 hover:border-cyan-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded mb-2"></div>
+                    <span class="text-sm font-medium">सियान</span>
+                </button>
+                <button onclick="changeTheme('dark')" class="p-4 rounded-xl border-2 border-gray-600 bg-gradient-to-br from-gray-800 to-gray-900 hover:border-gray-400 transition-all">
+                    <div class="w-full h-8 bg-gradient-to-r from-gray-700 to-gray-900 rounded mb-2"></div>
+                    <span class="text-sm font-medium text-white">डार्क</span>
+                </button>
+            </div>
+            <button onclick="closeThemeModal()" class="w-full bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                ❌ बंद करें
+            </button>
+        </div>
+    </div>
+
+    <!-- Notes Modal -->
+    <div id="notesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="modern-card p-6 w-full max-w-md slide-up">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">📝 नोट्स</h3>
+            <textarea id="notesText" placeholder="यहाँ अपने नोट्स लिखें..." class="w-full p-4 modern-input h-40 resize-none mb-4"></textarea>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="saveNotes()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                    💾 सेव करें
+                </button>
+                <button onclick="closeNotesModal()" class="bg-gradient-to-r from-gray-500 to-gray-600 text-white py-3 px-4 rounded-xl font-semibold modern-btn">
+                    ❌ बंद करें
+                </button>
             </div>
         </div>
     </div>
@@ -227,13 +427,35 @@
         let currentEditingProduct = null;
         let html5QrCode = null;
         let isScanning = false;
+        let currentTheme = localStorage.getItem('currentTheme') || 'blue';
+        let notes = localStorage.getItem('notes') || '';
+
+        // Sample product database for auto-fill
+        const productDatabase = {
+            '8901030895566': { name: 'मैगी नूडल्स', price: 12, details: '2 मिनट नूडल्स' },
+            '8901030895573': { name: 'लेज चिप्स', price: 20, details: 'आलू के चिप्स' },
+            '8901030895580': { name: 'कोका कोला', price: 40, details: '600ml बोतल' },
+            '8901030895597': { name: 'ब्रिटानिया बिस्कुट', price: 15, details: 'मैरी गोल्ड' },
+            '8901030895603': { name: 'अमूल मिल्क', price: 25, details: '500ml पैकेट' },
+            '8901030895610': { name: 'सनफीस्ट ऑयल', price: 120, details: '1 लीटर बोतल' },
+            '8901030895627': { name: 'टाटा नमक', price: 18, details: '1 किलो पैकेट' },
+            '8901030895634': { name: 'सर्फ एक्सेल', price: 35, details: 'डिटर्जेंट पाउडर' }
+        };
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('storeName').textContent = storeName;
+            document.body.className = `${document.body.className.split(' ')[0]} theme-${currentTheme}`;
             displayProducts();
             displayBillHistory();
             autoSave();
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#menuDropdown') && !e.target.closest('button[onclick="toggleMenu()"]')) {
+                    document.getElementById('menuDropdown').classList.add('hidden');
+                }
+            });
         });
 
         // Auto-save functionality
@@ -242,7 +464,88 @@
                 localStorage.setItem('products', JSON.stringify(products));
                 localStorage.setItem('billHistory', JSON.stringify(billHistory));
                 localStorage.setItem('storeName', storeName);
+                localStorage.setItem('currentTheme', currentTheme);
+                localStorage.setItem('notes', notes);
             }, 2000);
+        }
+
+        // Menu functions
+        function toggleMenu() {
+            const menu = document.getElementById('menuDropdown');
+            menu.classList.toggle('hidden');
+        }
+
+        function showThemeSelector() {
+            document.getElementById('menuDropdown').classList.add('hidden');
+            document.getElementById('themeModal').classList.remove('hidden');
+        }
+
+        function closeThemeModal() {
+            document.getElementById('themeModal').classList.add('hidden');
+        }
+
+        function changeTheme(theme) {
+            currentTheme = theme;
+            document.body.className = `bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen theme-${theme}`;
+            localStorage.setItem('currentTheme', theme);
+            closeThemeModal();
+            showToast('🎨 थीम बदल गई!', 'success');
+        }
+
+        function showNotesModal() {
+            document.getElementById('menuDropdown').classList.add('hidden');
+            document.getElementById('notesText').value = notes;
+            document.getElementById('notesModal').classList.remove('hidden');
+        }
+
+        function closeNotesModal() {
+            document.getElementById('notesModal').classList.add('hidden');
+        }
+
+        function saveNotes() {
+            notes = document.getElementById('notesText').value;
+            localStorage.setItem('notes', notes);
+            closeNotesModal();
+            showToast('📝 नोट्स सेव हो गए!', 'success');
+        }
+
+        // Fetch product details from barcode
+        function fetchProductDetails(barcode) {
+            if (!barcode.trim()) return;
+            
+            // Check if product exists in our database
+            if (productDatabase[barcode]) {
+                const product = productDatabase[barcode];
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productDetails').value = product.details;
+                
+                // Show success message
+                showToast('✅ प्रोडक्ट डिटेल्स ऑटो-फिल हो गए!', 'success');
+            } else if (products[barcode]) {
+                // Check if product exists in our store
+                const product = products[barcode];
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productDetails').value = product.details || '';
+                
+                showToast('📦 स्टोर से प्रोडक्ट डिटेल्स लोड हो गए!', 'info');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            
+            toast.className = `fixed top-20 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
         }
 
         // Section navigation
@@ -253,13 +556,9 @@
             document.getElementById('historySection').classList.add('hidden');
             
             // Remove active class from all tabs
-            document.getElementById('storeTab').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-            document.getElementById('shoppingTab').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-            document.getElementById('historyTab').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
-            
-            document.getElementById('storeTab').classList.add('text-gray-500');
-            document.getElementById('shoppingTab').classList.add('text-gray-500');
-            document.getElementById('historyTab').classList.add('text-gray-500');
+            document.getElementById('storeTab').className = 'flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50';
+            document.getElementById('shoppingTab').className = 'flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50';
+            document.getElementById('historyTab').className = 'flex-1 py-4 px-4 text-center font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-50';
             
             // Show selected section
             document.getElementById(section + 'Section').classList.remove('hidden');
@@ -267,17 +566,22 @@
             
             // Add active class to selected tab
             const activeTab = document.getElementById(section + 'Tab');
-            activeTab.classList.remove('text-gray-500');
-            activeTab.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            const icons = { store: '🏪', shopping: '🛒', history: '📋' };
+            const labels = { store: 'स्टोर', shopping: 'शॉपिंग', history: 'हिस्ट्री' };
+            
+            activeTab.className = 'flex-1 py-4 px-4 text-center font-semibold text-blue-600 border-b-3 border-blue-600 bg-blue-50';
+            activeTab.innerHTML = `${icons[section]} ${labels[section]}`;
         }
 
         // Store name editing
         function editStoreName() {
+            document.getElementById('menuDropdown').classList.add('hidden');
             const newName = prompt('स्टोर का नाम बदलें:', storeName);
             if (newName && newName.trim()) {
                 storeName = newName.trim();
                 document.getElementById('storeName').textContent = storeName;
                 localStorage.setItem('storeName', storeName);
+                showToast('✅ स्टोर का नाम अपडेट हो गया!', 'success');
             }
         }
 
@@ -310,29 +614,32 @@
                     if (backCamera) {
                         cameraId = backCamera.id;
                     } else if (devices.length > 1) {
-                        // If multiple cameras, usually the second one is back camera
+                        // If multiple cameras, usually the last one is back camera
                         cameraId = devices[devices.length - 1].id;
                     }
                     
                     html5QrCode.start(
                         cameraId,
                         {
-                            fps: 10,
-                            qrbox: { width: 280, height: 280 },
+                            fps: 15,
+                            qrbox: { width: 200, height: 200 },
                             aspectRatio: 1.0,
                             disableFlip: false,
                             videoConstraints: {
-                                facingMode: "environment", // This forces back camera
+                                facingMode: "environment",
                                 focusMode: "continuous",
                                 advanced: [
                                     { focusMode: "continuous" },
-                                    { focusDistance: { min: 0.1, max: 10 } }
+                                    { focusDistance: { min: 0.1, max: 10 } },
+                                    { zoom: { min: 1, max: 3 } }
                                 ]
                             }
                         },
                         (decodedText, decodedResult) => {
                             if (section === 'store') {
                                 document.getElementById('productBarcode').value = decodedText;
+                                fetchProductDetails(decodedText);
+                                showToast('📱 बारकोड स्कैन हो गया!', 'success');
                             } else if (section === 'shopping') {
                                 addToBill(decodedText);
                             }
@@ -348,11 +655,13 @@
                             { facingMode: "environment" },
                             {
                                 fps: 10,
-                                qrbox: { width: 280, height: 280 }
+                                qrbox: { width: 200, height: 200 }
                             },
                             (decodedText, decodedResult) => {
                                 if (section === 'store') {
                                     document.getElementById('productBarcode').value = decodedText;
+                                    fetchProductDetails(decodedText);
+                                    showToast('📱 बारकोड स्कैन हो गया!', 'success');
                                 } else if (section === 'shopping') {
                                     addToBill(decodedText);
                                 }
@@ -364,13 +673,13 @@
                         ).catch(err2 => {
                             console.log('Fallback scanner also failed:', err2);
                             stopScanning(section);
-                            alert('कैमरा एक्सेस नहीं मिल सका। कृपया मैन्युअल बारकोड डालें।');
+                            showToast('❌ कैमरा एक्सेस नहीं मिल सका', 'error');
                         });
                     });
                 }
             }).catch(err => {
                 console.log('Error getting cameras:', err);
-                alert('कैमरा एक्सेस नहीं मिल सका। कृपया मैन्युअल बारकोड डालें।');
+                showToast('❌ कैमरा एक्सेस नहीं मिल सका', 'error');
                 stopScanning(section);
             });
         }
@@ -400,7 +709,7 @@
             const details = document.getElementById('productDetails').value.trim();
 
             if (!name || !price) {
-                alert('कृपया प्रोडक्ट का नाम और कीमत डालें।');
+                showToast('❌ कृपया प्रोडक्ट का नाम और कीमत डालें', 'error');
                 return;
             }
 
@@ -422,7 +731,7 @@
             document.getElementById('productDetails').value = '';
 
             displayProducts();
-            alert('प्रोडक्ट सफलतापूर्वक जोड़ा गया!');
+            showToast('✅ प्रोडक्ट सफलतापूर्वक जोड़ा गया!', 'success');
         }
 
         function displayProducts() {
@@ -430,27 +739,27 @@
             productsList.innerHTML = '';
 
             if (Object.keys(products).length === 0) {
-                productsList.innerHTML = '<p class="text-gray-500 text-center py-4">कोई प्रोडक्ट नहीं मिला</p>';
+                productsList.innerHTML = '<div class="text-center py-8 text-gray-500"><div class="text-4xl mb-2">📦</div><p>कोई प्रोडक्ट नहीं मिला</p></div>';
                 return;
             }
 
             Object.values(products).forEach(product => {
                 const productDiv = document.createElement('div');
-                productDiv.className = 'bg-gray-50 p-3 rounded-lg border';
+                productDiv.className = 'bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300';
                 productDiv.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div class="flex-1">
-                            <h4 class="font-medium text-gray-800">${product.name}</h4>
-                            <p class="text-green-600 font-semibold">₹${product.price}</p>
-                            ${product.barcode ? `<p class="text-xs text-gray-500">बारकोड: ${product.barcode}</p>` : ''}
-                            ${product.details ? `<p class="text-sm text-gray-600 mt-1">${product.details}</p>` : ''}
+                            <h4 class="font-bold text-gray-800 text-lg">${product.name}</h4>
+                            <p class="text-green-600 font-bold text-xl">₹${product.price}</p>
+                            ${product.barcode ? `<p class="text-xs text-gray-500 bg-gray-200 inline-block px-2 py-1 rounded mt-1">🔢 ${product.barcode}</p>` : ''}
+                            ${product.details ? `<p class="text-sm text-gray-600 mt-2">${product.details}</p>` : ''}
                         </div>
-                        <div class="flex space-x-1 ml-2">
-                            <button onclick="editProduct('${product.id}')" class="p-1 bg-blue-500 text-white rounded text-xs">
-                                एडिट
+                        <div class="flex space-x-2 ml-3">
+                            <button onclick="editProduct('${product.id}')" class="p-2 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition-colors">
+                                ✏️
                             </button>
-                            <button onclick="deleteProduct('${product.id}')" class="p-1 bg-red-500 text-white rounded text-xs">
-                                डिलीट
+                            <button onclick="deleteProduct('${product.id}')" class="p-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors">
+                                🗑️
                             </button>
                         </div>
                     </div>
@@ -478,7 +787,7 @@
             const details = document.getElementById('editProductDetails').value.trim();
 
             if (!name || !price) {
-                alert('कृपया प्रोडक्ट का नाम और कीमत डालें।');
+                showToast('❌ कृपया प्रोडक्ट का नाम और कीमत डालें', 'error');
                 return;
             }
 
@@ -488,7 +797,7 @@
 
             closeEditModal();
             displayProducts();
-            alert('प्रोडक्ट अपडेट हो गया!');
+            showToast('✅ प्रोडक्ट अपडेट हो गया!', 'success');
         }
 
         function closeEditModal() {
@@ -497,9 +806,10 @@
         }
 
         function deleteProduct(productId) {
-            if (confirm('क्या आप इस प्रोडक्ट को डिलीट करना चाहते हैं?')) {
+            if (confirm('🗑️ क्या आप इस प्रोडक्ट को डिलीट करना चाहते हैं?')) {
                 delete products[productId];
                 displayProducts();
+                showToast('✅ प्रोडक्ट डिलीट हो गया!', 'success');
             }
         }
 
@@ -518,15 +828,15 @@
             );
 
             if (results.length === 0) {
-                searchResults.innerHTML = '<p class="text-gray-500 p-2">कोई प्रोडक्ट नहीं मिला</p>';
+                searchResults.innerHTML = '<div class="text-center py-4 text-gray-500"><div class="text-2xl mb-1">🔍</div><p>कोई प्रोडक्ट नहीं मिला</p></div>';
                 searchResults.classList.remove('hidden');
                 return;
             }
 
             searchResults.innerHTML = results.map(product => `
-                <div class="bg-gray-50 p-2 rounded border cursor-pointer hover:bg-gray-100" onclick="addToBill('${product.id}')">
-                    <div class="font-medium">${product.name}</div>
-                    <div class="text-green-600">₹${product.price}</div>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-xl border border-blue-200 cursor-pointer hover:shadow-md transition-all duration-300" onclick="addToBill('${product.id}')">
+                    <div class="font-semibold text-gray-800">${product.name}</div>
+                    <div class="text-green-600 font-bold">₹${product.price}</div>
                 </div>
             `).join('');
             
@@ -536,7 +846,7 @@
         function addToBill(productId) {
             const product = products[productId];
             if (!product) {
-                alert('प्रोडक्ट नहीं मिला!');
+                showToast('❌ प्रोडक्ट नहीं मिला!', 'error');
                 return;
             }
 
@@ -556,28 +866,29 @@
             document.getElementById('searchResults').classList.add('hidden');
             displayBillItems();
             updateTotal();
+            showToast('✅ प्रोडक्ट बिल में जोड़ा गया!', 'success');
         }
 
         function displayBillItems() {
             const billItemsDiv = document.getElementById('billItems');
             
             if (billItems.length === 0) {
-                billItemsDiv.innerHTML = '<p class="text-gray-500 text-center py-4">कोई आइटम नहीं</p>';
+                billItemsDiv.innerHTML = '<div class="text-center py-8 text-gray-500"><div class="text-4xl mb-2">🛍️</div><p>कोई आइटम नहीं</p></div>';
                 return;
             }
 
             billItemsDiv.innerHTML = billItems.map((item, index) => `
-                <div class="bg-gray-50 p-3 rounded border">
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
                     <div class="flex justify-between items-center">
                         <div class="flex-1">
-                            <h4 class="font-medium">${item.name}</h4>
-                            <p class="text-sm text-gray-600">₹${item.price} x ${item.quantity} = ₹${(item.price * item.quantity).toFixed(2)}</p>
+                            <h4 class="font-bold text-gray-800">${item.name}</h4>
+                            <p class="text-sm text-gray-600">₹${item.price} × ${item.quantity} = <span class="font-bold text-green-600">₹${(item.price * item.quantity).toFixed(2)}</span></p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button onclick="updateQuantity(${index}, -1)" class="w-8 h-8 bg-red-500 text-white rounded-full text-sm">-</button>
-                            <span class="w-8 text-center">${item.quantity}</span>
-                            <button onclick="updateQuantity(${index}, 1)" class="w-8 h-8 bg-green-500 text-white rounded-full text-sm">+</button>
-                            <button onclick="removeFromBill(${index})" class="w-8 h-8 bg-gray-500 text-white rounded-full text-sm">×</button>
+                            <button onclick="updateQuantity(${index}, -1)" class="w-8 h-8 bg-red-500 text-white rounded-full text-sm font-bold hover:bg-red-600 transition-colors">-</button>
+                            <span class="w-8 text-center font-bold">${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)" class="w-8 h-8 bg-green-500 text-white rounded-full text-sm font-bold hover:bg-green-600 transition-colors">+</button>
+                            <button onclick="removeFromBill(${index})" class="w-8 h-8 bg-gray-500 text-white rounded-full text-sm font-bold hover:bg-gray-600 transition-colors">×</button>
                         </div>
                     </div>
                 </div>
@@ -597,6 +908,7 @@
             billItems.splice(index, 1);
             displayBillItems();
             updateTotal();
+            showToast('✅ आइटम हटा दिया गया!', 'success');
         }
 
         function updateTotal() {
@@ -605,81 +917,155 @@
         }
 
         function clearBill() {
-            if (billItems.length > 0 && confirm('क्या आप बिल क्लियर करना चाहते हैं?')) {
+            if (billItems.length > 0 && confirm('🗑️ क्या आप बिल क्लियर करना चाहते हैं?')) {
                 billItems = [];
+                document.getElementById('customerName').value = '';
                 displayBillItems();
                 updateTotal();
+                showToast('✅ बिल क्लियर हो गया!', 'success');
             }
         }
 
         function saveBill() {
             if (billItems.length === 0) {
-                alert('बिल में कोई आइटम नहीं है!');
+                showToast('❌ बिल में कोई आइटम नहीं है!', 'error');
                 return;
             }
 
+            const customerName = document.getElementById('customerName').value.trim();
             const bill = {
                 id: Date.now(),
                 date: new Date().toLocaleString('hi-IN'),
+                customerName: customerName,
                 items: [...billItems],
                 total: billItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
             };
 
             billHistory.unshift(bill);
-            clearBill();
+            billItems = [];
+            document.getElementById('customerName').value = '';
+            displayBillItems();
+            updateTotal();
             displayBillHistory();
-            alert('बिल सेव हो गया!');
+            showToast('✅ बिल सेव हो गया!', 'success');
         }
 
         function printBill() {
             if (billItems.length === 0) {
-                alert('बिल में कोई आइटम नहीं है!');
+                showToast('❌ बिल में कोई आइटम नहीं है!', 'error');
                 return;
             }
 
+            const customerName = document.getElementById('customerName').value.trim();
             const total = billItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const printContent = `
-                <div style="font-family: 'Noto Sans Devanagari', sans-serif; max-width: 300px; margin: 0 auto; padding: 20px;">
-                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">
-                        <h2 style="margin: 0; font-size: 24px;">${storeName}</h2>
-                        <p style="margin: 5px 0;">बिल</p>
-                        <p style="margin: 0; font-size: 12px;">${new Date().toLocaleString('hi-IN')}</p>
-                    </div>
-                    
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-                        <thead>
-                            <tr style="border-bottom: 1px solid #000;">
-                                <th style="text-align: left; padding: 5px 0;">आइटम</th>
-                                <th style="text-align: center; padding: 5px 0;">मात्रा</th>
-                                <th style="text-align: right; padding: 5px 0;">राशि</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${billItems.map(item => `
-                                <tr>
-                                    <td style="padding: 3px 0; font-size: 14px;">${item.name}</td>
-                                    <td style="text-align: center; padding: 3px 0;">${item.quantity}</td>
-                                    <td style="text-align: right; padding: 3px 0;">₹${(item.price * item.quantity).toFixed(2)}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                    
-                    <div style="border-top: 2px solid #000; padding-top: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
-                            <span>कुल राशि:</span>
-                            <span>₹${total.toFixed(2)}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 20px; font-size: 12px;">
-                        <p>धन्यवाद!</p>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('printContent').innerHTML = printContent;
-            window.print();
+            
+            // Create canvas for image generation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size (POS receipt size)
+            canvas.width = 400;
+            canvas.height = 600 + (billItems.length * 25) + (customerName ? 25 : 0);
+            
+            // White background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text properties
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'center';
+            
+            let y = 40;
+            
+            // Store name
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText(storeName, canvas.width / 2, y);
+            y += 30;
+            
+            // Bill title
+            ctx.font = '16px Arial';
+            ctx.fillText('🧾 बिल', canvas.width / 2, y);
+            y += 25;
+            
+            // Date
+            ctx.font = '12px Arial';
+            ctx.fillText(new Date().toLocaleString('hi-IN'), canvas.width / 2, y);
+            y += 30;
+            
+            // Customer name if provided
+            if (customerName) {
+                ctx.font = '14px Arial';
+                ctx.fillText(`ग्राहक: ${customerName}`, canvas.width / 2, y);
+                y += 30;
+            }
+            
+            // Line separator
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(canvas.width - 20, y);
+            ctx.stroke();
+            y += 20;
+            
+            // Table headers
+            ctx.textAlign = 'left';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('आइटम', 20, y);
+            ctx.textAlign = 'center';
+            ctx.fillText('मात्रा', canvas.width / 2, y);
+            ctx.textAlign = 'right';
+            ctx.fillText('राशि', canvas.width - 20, y);
+            y += 20;
+            
+            // Line separator
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(canvas.width - 20, y);
+            ctx.stroke();
+            y += 15;
+            
+            // Bill items
+            ctx.font = '12px Arial';
+            billItems.forEach(item => {
+                ctx.textAlign = 'left';
+                ctx.fillText(item.name, 20, y);
+                ctx.textAlign = 'center';
+                ctx.fillText(item.quantity.toString(), canvas.width / 2, y);
+                ctx.textAlign = 'right';
+                ctx.fillText(`₹${(item.price * item.quantity).toFixed(2)}`, canvas.width - 20, y);
+                y += 25;
+            });
+            
+            // Line separator
+            y += 10;
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(canvas.width - 20, y);
+            ctx.stroke();
+            y += 25;
+            
+            // Total
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('कुल राशि:', 20, y);
+            ctx.textAlign = 'right';
+            ctx.fillText(`₹${total.toFixed(2)}`, canvas.width - 20, y);
+            y += 40;
+            
+            // Thank you message
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🙏 धन्यवाद!', canvas.width / 2, y);
+            
+            // Convert canvas to image and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bill_${Date.now()}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('📸 बिल इमेज डाउनलोड हो गई!', 'success');
+            });
         }
 
         // History functionality
@@ -687,26 +1073,27 @@
             const historyDiv = document.getElementById('billHistory');
             
             if (billHistory.length === 0) {
-                historyDiv.innerHTML = '<p class="text-gray-500 text-center py-4">कोई बिल हिस्ट्री नहीं</p>';
+                historyDiv.innerHTML = '<div class="text-center py-8 text-gray-500"><div class="text-4xl mb-2">📋</div><p>कोई बिल हिस्ट्री नहीं</p></div>';
                 return;
             }
 
             historyDiv.innerHTML = billHistory.map(bill => `
-                <div class="bg-gray-50 p-4 rounded-lg border">
-                    <div class="flex justify-between items-start mb-2">
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-200">
+                    <div class="flex justify-between items-start mb-3">
                         <div>
-                            <h4 class="font-medium">बिल #${bill.id}</h4>
-                            <p class="text-sm text-gray-600">${bill.date}</p>
+                            <h4 class="font-bold text-gray-800">🧾 बिल #${bill.id}</h4>
+                            <p class="text-sm text-gray-600">📅 ${bill.date}</p>
+                            ${bill.customerName ? `<p class="text-sm text-blue-600">👤 ${bill.customerName}</p>` : ''}
                         </div>
                         <div class="text-right">
-                            <p class="font-semibold text-green-600">₹${bill.total.toFixed(2)}</p>
-                            <button onclick="printOldBill(${bill.id})" class="text-xs bg-blue-500 text-white px-2 py-1 rounded mt-1">
-                                प्रिंट
+                            <p class="font-bold text-green-600 text-xl">₹${bill.total.toFixed(2)}</p>
+                            <button onclick="printOldBill(${bill.id})" class="text-xs bg-blue-500 text-white px-3 py-1 rounded-lg mt-1 font-semibold hover:bg-blue-600 transition-colors">
+                                📸 डाउनलोड
                             </button>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-600">
-                        ${bill.items.map(item => `${item.name} (${item.quantity})`).join(', ')}
+                    <div class="text-sm text-gray-600 bg-white p-2 rounded-lg">
+                        <strong>आइटम्स:</strong> ${bill.items.map(item => `${item.name} (${item.quantity})`).join(', ')}
                     </div>
                 </div>
             `).join('');
@@ -716,56 +1103,124 @@
             const bill = billHistory.find(b => b.id === billId);
             if (!bill) return;
 
-            const printContent = `
-                <div style="font-family: 'Noto Sans Devanagari', sans-serif; max-width: 300px; margin: 0 auto; padding: 20px;">
-                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">
-                        <h2 style="margin: 0; font-size: 24px;">${storeName}</h2>
-                        <p style="margin: 5px 0;">बिल #${bill.id}</p>
-                        <p style="margin: 0; font-size: 12px;">${bill.date}</p>
-                    </div>
-                    
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-                        <thead>
-                            <tr style="border-bottom: 1px solid #000;">
-                                <th style="text-align: left; padding: 5px 0;">आइटम</th>
-                                <th style="text-align: center; padding: 5px 0;">मात्रा</th>
-                                <th style="text-align: right; padding: 5px 0;">राशि</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${bill.items.map(item => `
-                                <tr>
-                                    <td style="padding: 3px 0; font-size: 14px;">${item.name}</td>
-                                    <td style="text-align: center; padding: 3px 0;">${item.quantity}</td>
-                                    <td style="text-align: right; padding: 3px 0;">₹${(item.price * item.quantity).toFixed(2)}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                    
-                    <div style="border-top: 2px solid #000; padding-top: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
-                            <span>कुल राशि:</span>
-                            <span>₹${bill.total.toFixed(2)}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 20px; font-size: 12px;">
-                        <p>धन्यवाद!</p>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('printContent').innerHTML = printContent;
-            window.print();
+            // Create canvas for image generation
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size (POS receipt size)
+            canvas.width = 400;
+            canvas.height = 600 + (bill.items.length * 25) + (bill.customerName ? 25 : 0);
+            
+            // White background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text properties
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'center';
+            
+            let y = 40;
+            
+            // Store name
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText(storeName, canvas.width / 2, y);
+            y += 30;
+            
+            // Bill title
+            ctx.font = '16px Arial';
+            ctx.fillText(`🧾 बिल #${bill.id}`, canvas.width / 2, y);
+            y += 25;
+            
+            // Date
+            ctx.font = '12px Arial';
+            ctx.fillText(bill.date, canvas.width / 2, y);
+            y += 30;
+            
+            // Customer name if provided
+            if (bill.customerName) {
+                ctx.font = '14px Arial';
+                ctx.fillText(`ग्राहक: ${bill.customerName}`, canvas.width / 2, y);
+                y += 30;
+            }
+            
+            // Line separator
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(canvas.width - 20, y);
+            ctx.stroke();
+            y += 20;
+            
+            // Table headers
+            ctx.textAlign = 'left';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('आइटम', 20, y);
+            ctx.textAlign = 'center';
+            ctx.fillText('मात्रा', canvas.width / 2, y);
+            ctx.textAlign = 'right';
+            ctx.fillText('राशि', canvas.width - 20, y);
+            y += 20;
+            
+            // Line separator
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(canvas.width - 20, y);
+            ctx.stroke();
+            y += 15;
+            
+            // Bill items
+            ctx.font = '12px Arial';
+            bill.items.forEach(item => {
+                ctx.textAlign = 'left';
+                ctx.fillText(item.name, 20, y);
+                ctx.textAlign = 'center';
+                ctx.fillText(item.quantity.toString(), canvas.width / 2, y);
+                ctx.textAlign = 'right';
+                ctx.fillText(`₹${(item.price * item.quantity).toFixed(2)}`, canvas.width - 20, y);
+                y += 25;
+            });
+            
+            // Line separator
+            y += 10;
+            ctx.beginPath();
+            ctx.moveTo(20, y);
+            ctx.lineTo(canvas.width - 20, y);
+            ctx.stroke();
+            y += 25;
+            
+            // Total
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('कुल राशि:', 20, y);
+            ctx.textAlign = 'right';
+            ctx.fillText(`₹${bill.total.toFixed(2)}`, canvas.width - 20, y);
+            y += 40;
+            
+            // Thank you message
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🙏 धन्यवाद!', canvas.width / 2, y);
+            
+            // Convert canvas to image and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `bill_${bill.id}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('📸 बिल इमेज डाउनलोड हो गई!', 'success');
+            });
         }
 
         // Data import/export
         function exportData() {
+            document.getElementById('menuDropdown').classList.add('hidden');
             const data = {
                 storeName: storeName,
                 products: products,
                 billHistory: billHistory,
+                currentTheme: currentTheme,
+                notes: notes,
                 exportDate: new Date().toISOString()
             };
 
@@ -776,6 +1231,8 @@
             link.href = URL.createObjectURL(dataBlob);
             link.download = `${storeName}_data_${new Date().toISOString().split('T')[0]}.json`;
             link.click();
+            
+            showToast('✅ डेटा एक्सपोर्ट हो गया!', 'success');
         }
 
         function importData(event) {
@@ -787,19 +1244,24 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     
-                    if (confirm('क्या आप वाकई डेटा इम्पोर्ट करना चाहते हैं? यह मौजूदा डेटा को बदल देगा।')) {
+                    if (confirm('📥 क्या आप वाकई डेटा इम्पोर्ट करना चाहते हैं? यह मौजूदा डेटा को बदल देगा।')) {
                         if (data.storeName) storeName = data.storeName;
                         if (data.products) products = data.products;
                         if (data.billHistory) billHistory = data.billHistory;
+                        if (data.currentTheme) {
+                            currentTheme = data.currentTheme;
+                            document.body.className = `bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen theme-${currentTheme}`;
+                        }
+                        if (data.notes) notes = data.notes;
                         
                         document.getElementById('storeName').textContent = storeName;
                         displayProducts();
                         displayBillHistory();
                         
-                        alert('डेटा सफलतापूर्वक इम्पोर्ट हो गया!');
+                        showToast('✅ डेटा सफलतापूर्वक इम्पोर्ट हो गया!', 'success');
                     }
                 } catch (error) {
-                    alert('गलत फाइल फॉर्मेट! कृपया सही JSON फाइल चुनें।');
+                    showToast('❌ गलत फाइल फॉर्मेट!', 'error');
                 }
             };
             reader.readAsText(file);
@@ -808,5 +1270,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f28e1d77741c9',t:'MTc1NTgzMjA0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972f5794a317b7e5',t:'MTc1NTgzMzk2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
