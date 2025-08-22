@@ -144,31 +144,40 @@
             top: 10px;
             right: 10px;
             z-index: 20;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 3px solid rgba(0, 0, 0, 0.3);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 4px solid rgba(0, 0, 0, 0.5);
             border-radius: 50%;
             color: #333;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
             transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
         
         .flashlight-btn:hover {
             background: rgba(255, 255, 255, 1);
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            border-color: rgba(0, 0, 0, 0.7);
         }
         
         .flashlight-btn.active {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
+            background: #FFD700;
+            color: #333;
+            border-color: #FFA500;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.8);
+            animation: flashPulse 1s infinite;
+        }
+        
+        @keyframes flashPulse {
+            0%, 100% { box-shadow: 0 6px 20px rgba(255, 215, 0, 0.8); }
+            50% { box-shadow: 0 6px 30px rgba(255, 215, 0, 1); }
         }
         
         .modern-card {
@@ -314,6 +323,11 @@
                                 <span class="text-lg">🖨️</span>
                                 <span class="text-main">सभी प्रोडक्ट्स प्रिंट करें</span>
                             </button>
+                            <hr class="my-2">
+                            <button onclick="clearHistory()" class="w-full text-left px-3 py-2 hover:bg-red-100 rounded-lg flex items-center space-x-2 text-sm text-red-600">
+                                <span class="text-lg">🗑️</span>
+                                <span>बिल हिस्ट्री क्लियर करें</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -352,11 +366,16 @@
                     <div id="storeScanner" class="scanner-container hidden mb-3">
                         <div id="storeReader" class="relative">
                             <div class="scanner-overlay"></div>
-                            <button onclick="toggleFlashlight('store')" id="storeFlashBtn" class="flashlight-btn">💡</button>
+                            <button onclick="toggleFlashlight('store')" id="storeFlashBtn" class="flashlight-btn" title="फ्लैशलाइट चालू/बंद करें">🔦</button>
                         </div>
-                        <button onclick="stopScanning('store')" class="w-full bg-red-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn mt-2 text-sm">
-                            ❌ स्कैन बंद करें
-                        </button>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="toggleFlashlight('store')" class="flex-1 bg-yellow-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm hover:bg-yellow-600">
+                                🔦 Flash On/Off
+                            </button>
+                            <button onclick="stopScanning('store')" class="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
+                                ❌ स्कैन बंद करें
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -422,11 +441,16 @@
             <div id="shoppingScanner" class="scanner-container hidden mb-3">
                 <div id="shoppingReader" class="relative">
                     <div class="scanner-overlay"></div>
-                    <button onclick="toggleFlashlight('shopping')" id="shoppingFlashBtn" class="flashlight-btn" title="फ्लैशलाइट चालू/बंद करें">💡</button>
+                    <button onclick="toggleFlashlight('shopping')" id="shoppingFlashBtn" class="flashlight-btn" title="फ्लैशलाइट चालू/बंद करें">🔦</button>
                 </div>
-                <button onclick="stopScanning('shopping')" class="w-full bg-red-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn mt-2 text-sm">
-                    ❌ स्कैन बंद करें
-                </button>
+                <div class="flex gap-2 mt-2">
+                    <button onclick="toggleFlashlight('shopping')" class="flex-1 bg-yellow-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm hover:bg-yellow-600">
+                        🔦 Flash On/Off
+                    </button>
+                    <button onclick="stopScanning('shopping')" class="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg font-semibold modern-btn text-sm">
+                        ❌ स्कैन बंद करें
+                    </button>
+                </div>
             </div>
             
             <div id="searchResults" class="hidden mb-3 space-y-2">
@@ -720,7 +744,8 @@
                         advanced: [{ torch: flashlightEnabled }]
                     }).then(() => {
                         flashBtn.classList.toggle('active', flashlightEnabled);
-                        flashBtn.textContent = flashlightEnabled ? '🔦' : '💡';
+                        flashBtn.textContent = flashlightEnabled ? '💡' : '🔦';
+                        flashBtn.title = flashlightEnabled ? 'फ्लैशलाइट बंद करें' : 'फ्लैशलाइट चालू करें';
                     }).catch(err => {
                         console.log('Torch not supported:', err);
                         showToast('❌ फ्लैशलाइट सपोर्ट नहीं है', 'error');
@@ -971,7 +996,8 @@
             
             if (flashBtn) {
                 flashBtn.classList.remove('active');
-                flashBtn.textContent = '💡';
+                flashBtn.textContent = '🔦';
+                flashBtn.title = 'फ्लैशलाइट चालू/बंद करें';
             }
         }
 
@@ -1706,6 +1732,32 @@
             showToast('🖨️ PDF प्रिंट के लिए तैयार!', 'success');
         }
 
+        // Clear history function
+        function clearHistory() {
+            document.getElementById('menuDropdown').classList.add('hidden');
+            
+            if (billHistory.length === 0) {
+                showToast('❌ कोई बिल हिस्ट्री नहीं है!', 'error');
+                return;
+            }
+            
+            // First warning
+            if (!confirm('⚠️ चेतावनी: क्या आप वाकई सभी बिल हिस्ट्री को डिलीट करना चाहते हैं?\n\nयह एक्शन वापस नहीं किया जा सकता!')) {
+                return;
+            }
+            
+            // Second warning with count
+            if (!confirm(`🚨 अंतिम चेतावनी!\n\nआप ${billHistory.length} बिल्स को हमेशा के लिए डिलीट करने वाले हैं।\n\nक्या आप पूरी तरह से निश्चित हैं?`)) {
+                return;
+            }
+            
+            // Clear the history
+            billHistory = [];
+            localStorage.setItem('billHistory', JSON.stringify(billHistory));
+            displayBillHistory();
+            showToast('✅ बिल हिस्ट्री पूरी तरह से क्लियर हो गई!', 'success');
+        }
+
         // Data import/export
         function exportData() {
             document.getElementById('menuDropdown').classList.add('hidden');
@@ -1764,5 +1816,5 @@
             event.target.value = '';
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'973000a620d83ada',t:'MTc1NTg0MDg4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97300c6727de4055',t:'MTc1NTg0MTM2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
