@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Store Manager</title>
+    
+    <meta name="theme-color" content="#3B82F6"/>
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="manifest" href="manifest.json">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
@@ -414,6 +419,7 @@
     </div>
     
     <script>
+        // आपका सारा Javascript कोड यहाँ है...
         // Global variables
         let products = JSON.parse(localStorage.getItem('products')) || {};
         let billItems = [];
@@ -1088,5 +1094,20 @@
             localStorage.setItem('currentTheme', theme);
         }
     </script>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+
 </body>
 </html>
