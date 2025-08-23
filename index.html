@@ -431,8 +431,9 @@
         let notes = localStorage.getItem('notes') || '';
         let flashlightEnabled = false;
         let currentStream = null;
-        let currentSection = 'home';
-        let currentScanningSection = null;
+        // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
+        let currentSection = 'home'; // वर्तमान में कौन सा सेक्शन खुला है, उसे ट्रैक करने के लिए
+        // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
         const productDatabase = {
             '8901030895566': { name: 'मैगी नूडल्स', price: 12, details: '2 मिनट नूडल्स' },
@@ -448,11 +449,14 @@
             updateDashboardStats();
             autoSave();
             
-            history.replaceState({ section: 'home' }, '', '#home');
-            window.addEventListener('popstate', handleBackButton);
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
+            // बैक बटन के लिए सेटअप
+            history.replaceState({ section: 'home' }, '', '#home'); // शुरुआती पेज के लिए हिस्ट्री सेट करें
+            window.addEventListener('popstate', handleBackButton); // जब भी बैक बटन दबेगा, यह फंक्शन चलेगा
             
             const initialSection = location.hash.substring(1) || 'home';
-            showSection(initialSection, false);
+            showSection(initialSection, false); // पेज लोड होने पर सही सेक्शन दिखाएं, बिना हिस्ट्री बदले
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
             document.addEventListener('click', function(e) {
                 const menu = document.getElementById('menuDropdown');
@@ -474,9 +478,10 @@
 
         function showAddModal() {
             document.getElementById('addProductModal').classList.remove('hidden');
-            history.pushState({ modal: 'add' }, '', location.href);
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
+            history.pushState({ modal: 'add' }, '', location.href); // मॉडल खोलने पर हिस्ट्री में जोड़ें
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
-
         function closeAddModal() {
             document.getElementById('addProductModal').classList.add('hidden');
             stopScanning('store');
@@ -500,22 +505,25 @@
             const menu = document.getElementById('menuDropdown');
             const isOpening = menu.classList.contains('hidden');
             menu.classList.toggle('hidden');
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             if (isOpening) {
                 history.pushState({ menu: 'open' }, '', location.href);
             }
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
-        
+
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
             const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
             toast.className = `fixed top-20 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in`;
             toast.textContent = message;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 1000); 
+            setTimeout(() => { toast.remove(); }, 2500);
         }
-
+        
+        // <<<<<<<<<<<<<<<< मौजूदा showSection फंक्शन में बदलाव >>>>>>>>>>>>>>>>
         function showSection(section, pushToHistory = true) {
-            if (currentSection === section) return;
+            if (currentSection === section) return; // अगर पहले से वही सेक्शन खुला है तो कुछ न करें
 
             ['home', 'store', 'shopping', 'history'].forEach(s => {
                 document.getElementById(s + 'Section').classList.add('hidden');
@@ -528,7 +536,7 @@
             document.getElementById(section + 'TabDesktop').classList.add('active');
             document.getElementById('floatingAddBtn').classList.toggle('hidden', section !== 'store');
             
-            currentSection = section;
+            currentSection = section; // वर्तमान सेक्शन को अपडेट करें
 
             if (pushToHistory) {
                 history.pushState({ section: section }, '', `#${section}`);
@@ -541,6 +549,8 @@
                 stopScanning('store');
             }
         }
+        // <<<<<<<<<<<<<<<<<<<< बदलाव यहाँ खत्म >>>>>>>>>>>>>>>>>>>>
+
 
         function editStoreName() {
             toggleMenu();
@@ -553,80 +563,98 @@
             }
         }
         
+        // === BARCODE SCANNER IMPROVED ===
         function startScanning(section) {
             if (isScanning) return;
             const scannerDiv = document.getElementById(section + 'Scanner');
             scannerDiv.classList.remove('hidden');
             isScanning = true;
-            currentScanningSection = section;
-            history.pushState({ scanner: 'open' }, '', location.href);
-            
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
+            history.pushState({ scanner: 'open' }, '', location.href); // स्कैनर के लिए हिस्ट्री जोड़ें
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
             const readerElement = document.getElementById(section + 'Reader');
             html5QrCode = new Html5Qrcode(readerElement.id);
 
             const config = { 
-                fps: 25,
+                fps: 10, 
                 qrbox: (viewfinderWidth, viewfinderHeight) => ({
-                    width: Math.min(viewfinderWidth, viewfinderHeight) * 0.85,
+                    width: Math.min(viewfinderWidth, viewfinderHeight) * 0.8,
                     height: Math.min(viewfinderWidth, viewfinderHeight) * 0.5
                 }),
                 rememberLastUsedCamera: true,
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-                disableFlip: false
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
             };
             
-            html5QrCode.start({ facingMode: 'environment' }, config, handleScanResult)
-            .catch(err => {
-                showToast('❌ कैमरा एक्सेस नहीं हो सका।', 'error');
-                if(history.state && history.state.scanner){
-                   history.back();
+            const onScanSuccess = (decodedText, decodedResult) => {
+                // stopScanning अब back action से हैंडल होगा, इसलिए यहाँ से history.back() कॉल करेंगे
+                if(history.state && (history.state.scanner || history.state.modal)){
+                   history.back(); // स्कैनर को बंद करने के लिए बैक करें
+                }
+                if (section === 'store') {
+                    document.getElementById('productBarcode').value = decodedText;
+                    fetchProductDetails(decodedText);
+                    showToast('📱 बारकोड स्कैन हो गया!', 'success');
+                } else if (section === 'shopping') {
+                    if (products[decodedText]) {
+                        addToBill(decodedText);
+                    } else {
+                        showToast(`❌ बारकोड '${decodedText}' स्टोर में नहीं मिला!`, 'error');
+                    }
+                }
+            };
+
+            html5QrCode.start({ facingMode: 'environment' }, config, onScanSuccess)
+            .then(() => {
+                const video = readerElement.querySelector('video');
+                if (video && video.srcObject) {
+                    currentStream = video.srcObject;
+                }
+            }).catch(err => {
+                showToast('❌ कैमरा एक्सेस नहीं हो सका। कृपया अनुमति दें।', 'error');
+                if(history.state && (history.state.scanner || history.state.modal)){
+                   history.back(); // अगर कैमरा फेल हो तो भी स्कैनर UI बंद करें
                 }
             });
         }
-
         function stopScanning(section) {
             if (html5QrCode && isScanning) {
                 html5QrCode.stop().catch(err => {});
             }
-            if (section) {
-                const scannerDiv = document.getElementById(section + 'Scanner');
-                if (scannerDiv) {
-                    scannerDiv.classList.add('hidden');
-                }
+            const scannerDiv = document.getElementById(section + 'Scanner');
+            if (scannerDiv) {
+                scannerDiv.classList.add('hidden');
             }
             isScanning = false;
-            currentScanningSection = null;
             flashlightEnabled = false;
             currentStream = null;
+            const flashBtn = document.getElementById(section + 'FlashBtn');
+            if (flashBtn) {
+                flashBtn.classList.remove('active');
+                flashBtn.innerHTML = '🔦';
+            }
         }
         
-        function handleScanResult(decodedText, decodedResult) {
-            const section = currentScanningSection;
-            
-            stopScanning(section);
-            
-            if (section === 'store') {
-                document.getElementById('productBarcode').value = decodedText;
-                fetchProductDetails(decodedText);
-                showToast('📱 बारकोड स्कैन हो गया!', 'success');
-            } else if (section === 'shopping') {
-                if (products[decodedText]) {
-                    addToBill(decodedText);
-                } else {
-                    showToast(`❌ प्रोडक्ट '${decodedText}' स्टोर में नहीं है!`, 'error');
-                }
-            }
-            
-            if(history.state && history.state.scanner){
-                history.back();
-            }
-        }
-
         function toggleFlashlight(section) {
-            // This function remains unchanged...
+            const flashBtn = document.getElementById(section + 'FlashBtn');
+            if (currentStream && currentStream.getVideoTracks().length > 0) {
+                const track = currentStream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                
+                if (capabilities.torch) {
+                    flashlightEnabled = !flashlightEnabled;
+                    track.applyConstraints({ advanced: [{ torch: flashlightEnabled }] })
+                        .then(() => {
+                            flashBtn.classList.toggle('active', flashlightEnabled);
+                            flashBtn.innerHTML = flashlightEnabled ? '💡' : '🔦';
+                        }).catch(() => showToast('❌ फ्लैशलाइट ऑन नहीं हो सकी', 'error'));
+                } else {
+                    showToast('❌ इस डिवाइस पर फ्लैशलाइट सपोर्ट नहीं है', 'error');
+                }
+            } else {
+                showToast('❌ कैमरा स्ट्रीम उपलब्ध नहीं है', 'error');
+            }
         }
         
-        // ... (The rest of the functions like printAllProducts, addProduct, etc. are here and unchanged) ...
         function printAllProducts() {
             toggleMenu();
             if (Object.keys(products).length === 0) {
@@ -702,11 +730,13 @@
             const productId = barcode || Date.now().toString();
             products[productId] = { id: productId, barcode: barcode, name, price, details, dateAdded: new Date().toISOString() };
             
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             if(history.state && history.state.modal) {
-                history.back(); 
+                history.back(); // मॉडल को बंद करने के लिए बैक करें
             } else {
-                closeAddModal();
+                closeAddModal(); // फॉलबैक
             }
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
             searchAndSortProducts();
             showToast('✅ प्रोडक्ट सफलतापूर्वक जोड़ा गया!', 'success');
@@ -792,7 +822,9 @@
             document.getElementById('editProductPrice').value = product.price;
             document.getElementById('editProductDetails').value = product.details || '';
             document.getElementById('editModal').classList.remove('hidden');
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             history.pushState({ modal: 'edit' }, '', location.href);
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
 
         function updateProduct() {
@@ -805,11 +837,13 @@
             products[currentEditingProduct].price = price;
             products[currentEditingProduct].details = details;
             
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             if(history.state && history.state.modal) {
-                history.back();
+                history.back(); // मॉडल बंद करें
             } else {
-                closeEditModal();
+                closeEditModal(); // फॉलबैक
             }
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
             searchAndSortProducts(); 
             showToast('✅ प्रोडक्ट अपडेट हो गया!', 'success');
@@ -924,15 +958,56 @@
         }
 
         function printBill() {
-            // This function remains unchanged...
+            if (billItems.length === 0) { showToast('❌ बिल में कोई आइटम नहीं है!', 'error'); return; }
+            const bill = {
+                customerName: document.getElementById('customerName').value.trim(),
+                items: billItems,
+                total: billItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                date: new Date().toLocaleString('hi-IN')
+            };
+            generateBillImage(bill, `bill_${Date.now()}.png`);
         }
 
         function printOldBill(billId) {
-            // This function remains unchanged...
+            event.stopPropagation();
+            const bill = billHistory.find(b => b.id === billId);
+            if (!bill) return;
+            generateBillImage(bill, `bill_${bill.id}.png`);
         }
 
         function generateBillImage(bill, filename) {
-            // This function remains unchanged...
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 400; canvas.height = 300 + (bill.items.length * 25) + (bill.customerName ? 25 : 0);
+            ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#000000'; ctx.textAlign = 'center';
+            let y = 40;
+            ctx.font = 'bold 24px Arial'; ctx.fillText(storeName, canvas.width / 2, y); y += 30;
+            ctx.font = '16px Arial'; ctx.fillText('🧾 बिल', canvas.width / 2, y); y += 25;
+            ctx.font = '12px Arial'; ctx.fillText(bill.date, canvas.width / 2, y); y += 30;
+            if (bill.customerName) {
+                ctx.font = '14px Arial'; ctx.fillText(`ग्राहक: ${bill.customerName}`, canvas.width / 2, y); y += 30;
+            }
+            ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(canvas.width - 20, y); ctx.stroke(); y += 20;
+            ctx.textAlign = 'left'; ctx.font = 'bold 14px Arial'; ctx.fillText('आइटम', 20, y);
+            ctx.textAlign = 'center'; ctx.fillText('मात्रा', canvas.width / 2, y);
+            ctx.textAlign = 'right'; ctx.fillText('राशि', canvas.width - 20, y); y += 20;
+            ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(canvas.width - 20, y); ctx.stroke(); y += 15;
+            ctx.font = '12px Arial';
+            bill.items.forEach(item => {
+                ctx.textAlign = 'left'; ctx.fillText(item.name, 20, y);
+                ctx.textAlign = 'center'; ctx.fillText(item.quantity.toString(), canvas.width / 2, y);
+                ctx.textAlign = 'right'; ctx.fillText(`₹${(item.price * item.quantity).toFixed(2)}`, canvas.width - 20, y); y += 25;
+            });
+            y += 10; ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(canvas.width - 20, y); ctx.stroke(); y += 25;
+            ctx.font = 'bold 18px Arial'; ctx.textAlign = 'left'; ctx.fillText('कुल राशि:', 20, y);
+            ctx.textAlign = 'right'; ctx.fillText(`₹${bill.total.toFixed(2)}`, canvas.width - 20, y); y += 40;
+            ctx.font = '12px Arial'; ctx.textAlign = 'center'; ctx.fillText('🙏 धन्यवाद!', canvas.width / 2, y);
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob); const a = document.createElement('a');
+                a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url);
+                showToast('📸 बिल इमेज डाउनलोड हो गई!', 'success');
+            });
         }
 
         function displayBillHistory() {
@@ -977,15 +1052,56 @@
         }
         
         function resetApplication() {
-            // This function remains unchanged...
+            toggleMenu();
+            if (confirm("🚨 चेतावनी 1/5: क्या आप वाकई एप्लीकेशन को रीसेट करना चाहते हैं?")) {
+                if (confirm("🚨 चेतावनी 2/5: ऐसा करने से आपके सभी प्रोडक्ट्स, बिल हिस्ट्री और सेटिंग्स हमेशा के लिए डिलीट हो जाएंगे।")) {
+                    if (confirm("🚨 चेतावनी 3/5: इस प्रक्रिया को पूर्ववत नहीं किया जा सकता।")) {
+                        if (confirm("🚨 चेतावनी 4/5: कृपया सुनिश्चित करें कि आपने अपने डेटा का बैकअप ले लिया है।")) {
+                            if (confirm("🚨 अंतिम चेतावनी 5/5: क्या आप निश्चित रूप से सब कुछ डिलीट करना चाहते हैं?")) {
+                                localStorage.clear();
+                                alert("✅ एप्लीकेशन सफलतापूर्वक रीसेट हो गया है। पेज अब रीलोड होगा।");
+                                location.reload();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         function exportData() {
-            // This function remains unchanged...
+            toggleMenu();
+            const data = { storeName, products, billHistory, currentTheme, notes, exportDate: new Date().toISOString() };
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${storeName}_backup_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            showToast('✅ डेटा एक्सपोर्ट हो गया!', 'success');
         }
 
         function importData(event) {
-            // This function remains unchanged...
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (confirm('📥 क्या आप वाकई डेटा इम्पोर्ट करना चाहते हैं? यह मौजूदा डेटा को बदल देगा।')) {
+                        if (data.storeName) storeName = data.storeName;
+                        if (data.products) products = data.products;
+                        if (data.billHistory) billHistory = data.billHistory;
+                        if (data.currentTheme) currentTheme = data.currentTheme;
+                        if (data.notes) notes = data.notes;
+                        document.getElementById('storeName').textContent = storeName;
+                        applyTheme(currentTheme); 
+                        searchAndSortProducts(); 
+                        displayBillHistory();
+                        showToast('✅ डेटा सफलतापूर्वक इम्पोर्ट हो गया!', 'success');
+                    }
+                } catch (error) { showToast('❌ गलत फाइल फॉर्मेट!', 'error'); }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
         }
 
         function fetchProductDetails(barcode) {
@@ -1019,12 +1135,16 @@
         function showNotesModal() {
             toggleMenu(); document.getElementById('notesText').value = notes;
             document.getElementById('notesModal').classList.remove('hidden');
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             history.pushState({ modal: 'notes' }, '', location.href);
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
 
         function showThemeSelector() {
             toggleMenu(); document.getElementById('themeModal').classList.remove('hidden');
+            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             history.pushState({ modal: 'theme' }, '', location.href);
+            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
 
         function closeThemeModal() {
@@ -1036,7 +1156,9 @@
             localStorage.setItem('currentTheme', theme);
         }
 
+        // <<<<<<<<<<<<<<<< यह पूरा फंक्शन नया जोड़ा गया है >>>>>>>>>>>>>>>>
         function handleBackButton(event) {
+            // सबसे पहले चेक करें कि कोई मॉडल या स्कैनर खुला है क्या
             if (!document.getElementById('addProductModal').classList.contains('hidden')) {
                 closeAddModal();
                 return;
@@ -1054,7 +1176,8 @@
                 return;
             }
             if (isScanning) {
-                stopScanning(currentScanningSection);
+                stopScanning('store');
+                stopScanning('shopping');
                 return;
             }
             if (!document.getElementById('menuDropdown').classList.contains('hidden')) {
@@ -1062,25 +1185,26 @@
                 return;
             }
 
+            // अगर कुछ भी नहीं खुला है, तो सेक्शन बदलने का काम करें
             const targetSection = (event.state && event.state.section) ? event.state.section : 'home';
             
             if (currentSection !== 'home') {
-                 showSection(targetSection, false);
+                 showSection(targetSection, false); // false मतलब हिस्ट्री में दोबारा न जोड़ें
             } else {
-                 // If on home screen, allow the app to close
-                 window.close(); 
+                 // अगर होम पर हैं, तो ऐप को बंद होने दें (ब्राउज़र का डिफ़ॉल्ट बिहेवियर)
+                 history.back();
             }
         }
+        // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
     </script>
     
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // path /sw.js से बदलकर sw.js कर दिया है
-                navigator.serviceWorker.register('sw.js')
+                navigator.serviceWorker.register('/sw.js')
                     .then(registration => {
-                        console.log('ServiceWorker registration successful');
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
                     })
                     .catch(error => {
                         console.log('ServiceWorker registration failed: ', error);
