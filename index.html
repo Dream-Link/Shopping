@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="icon-192x192.png">
     <link rel="manifest" href="manifest.json">
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn/tailwindcss.com"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -431,9 +431,10 @@
         let notes = localStorage.getItem('notes') || '';
         let flashlightEnabled = false;
         let currentStream = null;
-        // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
-        let currentSection = 'home'; // वर्तमान में कौन सा सेक्शन खुला है, उसे ट्रैक करने के लिए
-        // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
+        let currentSection = 'home';
+        // <<<<<<<<<<<<< नया कोड यहाँ से शुरू (स्कैनर सुधार) >>>>>>>>>>>>>
+        let currentScanningSection = null; // यह ट्रैक करेगा कि कौन सा स्कैनर (स्टोर या शॉपिंग) चल रहा है
+        // <<<<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>>>>
 
         const productDatabase = {
             '8901030895566': { name: 'मैगी नूडल्स', price: 12, details: '2 मिनट नूडल्स' },
@@ -449,14 +450,11 @@
             updateDashboardStats();
             autoSave();
             
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
-            // बैक बटन के लिए सेटअप
-            history.replaceState({ section: 'home' }, '', '#home'); // शुरुआती पेज के लिए हिस्ट्री सेट करें
-            window.addEventListener('popstate', handleBackButton); // जब भी बैक बटन दबेगा, यह फंक्शन चलेगा
+            history.replaceState({ section: 'home' }, '', '#home');
+            window.addEventListener('popstate', handleBackButton);
             
             const initialSection = location.hash.substring(1) || 'home';
-            showSection(initialSection, false); // पेज लोड होने पर सही सेक्शन दिखाएं, बिना हिस्ट्री बदले
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
+            showSection(initialSection, false);
 
             document.addEventListener('click', function(e) {
                 const menu = document.getElementById('menuDropdown');
@@ -478,9 +476,7 @@
 
         function showAddModal() {
             document.getElementById('addProductModal').classList.remove('hidden');
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
-            history.pushState({ modal: 'add' }, '', location.href); // मॉडल खोलने पर हिस्ट्री में जोड़ें
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
+            history.pushState({ modal: 'add' }, '', location.href);
         }
         function closeAddModal() {
             document.getElementById('addProductModal').classList.add('hidden');
@@ -505,25 +501,25 @@
             const menu = document.getElementById('menuDropdown');
             const isOpening = menu.classList.contains('hidden');
             menu.classList.toggle('hidden');
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             if (isOpening) {
                 history.pushState({ menu: 'open' }, '', location.href);
             }
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
-
+        
+        // <<<<<<<<<<<<< showToast फंक्शन में बदलाव (पॉप-अप टाइम) >>>>>>>>>>>>>
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
             const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
             toast.className = `fixed top-20 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 fade-in`;
             toast.textContent = message;
             document.body.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 2500);
+            // यहाँ 2500 को 1000 कर दिया गया है
+            setTimeout(() => { toast.remove(); }, 1000); 
         }
-        
-        // <<<<<<<<<<<<<<<< मौजूदा showSection फंक्शन में बदलाव >>>>>>>>>>>>>>>>
+        // <<<<<<<<<<<<<<<<<<<< बदलाव यहाँ खत्म >>>>>>>>>>>>>>>>>>>>
+
         function showSection(section, pushToHistory = true) {
-            if (currentSection === section) return; // अगर पहले से वही सेक्शन खुला है तो कुछ न करें
+            if (currentSection === section) return;
 
             ['home', 'store', 'shopping', 'history'].forEach(s => {
                 document.getElementById(s + 'Section').classList.add('hidden');
@@ -536,7 +532,7 @@
             document.getElementById(section + 'TabDesktop').classList.add('active');
             document.getElementById('floatingAddBtn').classList.toggle('hidden', section !== 'store');
             
-            currentSection = section; // वर्तमान सेक्शन को अपडेट करें
+            currentSection = section;
 
             if (pushToHistory) {
                 history.pushState({ section: section }, '', `#${section}`);
@@ -549,8 +545,6 @@
                 stopScanning('store');
             }
         }
-        // <<<<<<<<<<<<<<<<<<<< बदलाव यहाँ खत्म >>>>>>>>>>>>>>>>>>>>
-
 
         function editStoreName() {
             toggleMenu();
@@ -563,59 +557,46 @@
             }
         }
         
-        // === BARCODE SCANNER IMPROVED ===
+        // <<<<<<<<<<<<< startScanning फंक्शन में बदलाव (स्कैनर सुधार) >>>>>>>>>>>>>
         function startScanning(section) {
             if (isScanning) return;
             const scannerDiv = document.getElementById(section + 'Scanner');
             scannerDiv.classList.remove('hidden');
             isScanning = true;
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
-            history.pushState({ scanner: 'open' }, '', location.href); // स्कैनर के लिए हिस्ट्री जोड़ें
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
+            currentScanningSection = section; // सेट करें कि कौन सा स्कैनर चालू है
+            history.pushState({ scanner: 'open' }, '', location.href);
+            
             const readerElement = document.getElementById(section + 'Reader');
             html5QrCode = new Html5Qrcode(readerElement.id);
 
+            // स्कैनर की स्पीड और एक्यूरेसी के लिए बेहतर सेटिंग्स
             const config = { 
-                fps: 10, 
+                fps: 25, // फ्रेम्स प्रति सेकंड बढ़ाया गया
                 qrbox: (viewfinderWidth, viewfinderHeight) => ({
-                    width: Math.min(viewfinderWidth, viewfinderHeight) * 0.8,
+                    width: Math.min(viewfinderWidth, viewfinderHeight) * 0.85,
                     height: Math.min(viewfinderWidth, viewfinderHeight) * 0.5
                 }),
                 rememberLastUsedCamera: true,
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+                disableFlip: false // कैमरा फ्लिप को डिसेबल किया
             };
             
-            const onScanSuccess = (decodedText, decodedResult) => {
-                // stopScanning अब back action से हैंडल होगा, इसलिए यहाँ से history.back() कॉल करेंगे
-                if(history.state && (history.state.scanner || history.state.modal)){
-                   history.back(); // स्कैनर को बंद करने के लिए बैक करें
-                }
-                if (section === 'store') {
-                    document.getElementById('productBarcode').value = decodedText;
-                    fetchProductDetails(decodedText);
-                    showToast('📱 बारकोड स्कैन हो गया!', 'success');
-                } else if (section === 'shopping') {
-                    if (products[decodedText]) {
-                        addToBill(decodedText);
-                    } else {
-                        showToast(`❌ बारकोड '${decodedText}' स्टोर में नहीं मिला!`, 'error');
-                    }
-                }
-            };
-
-            html5QrCode.start({ facingMode: 'environment' }, config, onScanSuccess)
+            // onScanSuccess को एक अलग फंक्शन (handleScanResult) में ले जाया गया है
+            html5QrCode.start({ facingMode: 'environment' }, config, handleScanResult)
             .then(() => {
                 const video = readerElement.querySelector('video');
                 if (video && video.srcObject) {
                     currentStream = video.srcObject;
                 }
             }).catch(err => {
-                showToast('❌ कैमरा एक्सेस नहीं हो सका। कृपया अनुमति दें।', 'error');
-                if(history.state && (history.state.scanner || history.state.modal)){
-                   history.back(); // अगर कैमरा फेल हो तो भी स्कैनर UI बंद करें
+                showToast('❌ कैमरा एक्सेस नहीं हो सका।', 'error');
+                if(history.state && history.state.scanner){
+                   history.back();
                 }
             });
         }
+
+        // <<<<<<<<<<<<< stopScanning फंक्शन में बदलाव (स्कैनर सुधार) >>>>>>>>>>>>>
         function stopScanning(section) {
             if (html5QrCode && isScanning) {
                 html5QrCode.stop().catch(err => {});
@@ -625,6 +606,7 @@
                 scannerDiv.classList.add('hidden');
             }
             isScanning = false;
+            currentScanningSection = null; // स्कैनर बंद होने पर इसे रीसेट करें
             flashlightEnabled = false;
             currentStream = null;
             const flashBtn = document.getElementById(section + 'FlashBtn');
@@ -633,7 +615,34 @@
                 flashBtn.innerHTML = '🔦';
             }
         }
-        
+
+        // <<<<<<<<<<<<< यह पूरा फंक्शन नया जोड़ा गया है (स्कैनर सुधार) >>>>>>>>>>>>>
+        function handleScanResult(decodedText, decodedResult) {
+            const section = currentScanningSection; // पता करें कौनसा स्कैनर एक्टिव था
+            
+            // 1. सबसे पहले स्कैनर को रोकें और UI को छिपाएं
+            stopScanning(section);
+            
+            // 2. अब मुख्य काम करें
+            if (section === 'store') {
+                document.getElementById('productBarcode').value = decodedText;
+                fetchProductDetails(decodedText);
+                showToast('📱 बारकोड स्कैन हो गया!', 'success');
+            } else if (section === 'shopping') {
+                if (products[decodedText]) {
+                    addToBill(decodedText);
+                } else {
+                    // अगर प्रोडक्ट नहीं मिला, तो भी पॉप-अप दिखाएं
+                    showToast(`❌ प्रोडक्ट '${decodedText}' स्टोर में नहीं है!`, 'error');
+                }
+            }
+            
+            // 3. अंत में, स्कैनर के लिए जो हिस्ट्री बनाई थी, उसे हटाएं
+            if(history.state && history.state.scanner){
+                history.back();
+            }
+        }
+
         function toggleFlashlight(section) {
             const flashBtn = document.getElementById(section + 'FlashBtn');
             if (currentStream && currentStream.getVideoTracks().length > 0) {
@@ -730,13 +739,11 @@
             const productId = barcode || Date.now().toString();
             products[productId] = { id: productId, barcode: barcode, name, price, details, dateAdded: new Date().toISOString() };
             
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             if(history.state && history.state.modal) {
-                history.back(); // मॉडल को बंद करने के लिए बैक करें
+                history.back(); 
             } else {
-                closeAddModal(); // फॉलबैक
+                closeAddModal();
             }
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
             searchAndSortProducts();
             showToast('✅ प्रोडक्ट सफलतापूर्वक जोड़ा गया!', 'success');
@@ -822,9 +829,7 @@
             document.getElementById('editProductPrice').value = product.price;
             document.getElementById('editProductDetails').value = product.details || '';
             document.getElementById('editModal').classList.remove('hidden');
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             history.pushState({ modal: 'edit' }, '', location.href);
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
 
         function updateProduct() {
@@ -837,13 +842,11 @@
             products[currentEditingProduct].price = price;
             products[currentEditingProduct].details = details;
             
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             if(history.state && history.state.modal) {
-                history.back(); // मॉडल बंद करें
+                history.back();
             } else {
-                closeEditModal(); // फॉलबैक
+                closeEditModal();
             }
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
             searchAndSortProducts(); 
             showToast('✅ प्रोडक्ट अपडेट हो गया!', 'success');
@@ -1135,16 +1138,12 @@
         function showNotesModal() {
             toggleMenu(); document.getElementById('notesText').value = notes;
             document.getElementById('notesModal').classList.remove('hidden');
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             history.pushState({ modal: 'notes' }, '', location.href);
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
 
         function showThemeSelector() {
             toggleMenu(); document.getElementById('themeModal').classList.remove('hidden');
-            // <<<<<<<<<<<<<<<< नया कोड यहाँ से शुरू >>>>>>>>>>>>>>>>
             history.pushState({ modal: 'theme' }, '', location.href);
-            // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
         }
 
         function closeThemeModal() {
@@ -1156,9 +1155,7 @@
             localStorage.setItem('currentTheme', theme);
         }
 
-        // <<<<<<<<<<<<<<<< यह पूरा फंक्शन नया जोड़ा गया है >>>>>>>>>>>>>>>>
         function handleBackButton(event) {
-            // सबसे पहले चेक करें कि कोई मॉडल या स्कैनर खुला है क्या
             if (!document.getElementById('addProductModal').classList.contains('hidden')) {
                 closeAddModal();
                 return;
@@ -1176,8 +1173,7 @@
                 return;
             }
             if (isScanning) {
-                stopScanning('store');
-                stopScanning('shopping');
+                stopScanning(currentScanningSection);
                 return;
             }
             if (!document.getElementById('menuDropdown').classList.contains('hidden')) {
@@ -1185,17 +1181,14 @@
                 return;
             }
 
-            // अगर कुछ भी नहीं खुला है, तो सेक्शन बदलने का काम करें
             const targetSection = (event.state && event.state.section) ? event.state.section : 'home';
             
             if (currentSection !== 'home') {
-                 showSection(targetSection, false); // false मतलब हिस्ट्री में दोबारा न जोड़ें
+                 showSection(targetSection, false);
             } else {
-                 // अगर होम पर हैं, तो ऐप को बंद होने दें (ब्राउज़र का डिफ़ॉल्ट बिहेवियर)
                  history.back();
             }
         }
-        // <<<<<<<<<<<<<<<<<< नया कोड यहाँ खत्म >>>>>>>>>>>>>>>>>
 
     </script>
     
